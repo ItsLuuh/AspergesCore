@@ -1,7 +1,9 @@
 package core.luuh.aspergescore;
 
 import core.luuh.aspergescore.db.Database;
-import core.luuh.aspergescore.events.SetStartingValuesDB;
+import core.luuh.aspergescore.scoreboard.LoadSBCommand;
+import core.luuh.aspergescore.scoreboard.ScoreboardPlayerQJEvent;
+import core.luuh.aspergescore.utils.scoreboard.SBFilesManager;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -18,16 +20,26 @@ public final class AspergesCore extends JavaPlugin {
 
     }
 
-    public void registerCommands(){
+    static AspergesCore instance;
 
-        // getCommand("coinflip").setExecutor(new CoinflipCommand(this));
-        // getCommand("coinflip").setTabCompleter(new CoinflipCommand(this));
+    public static AspergesCore getInstance(){
+        return instance;
+    }
+
+    private void registerCommands(){
+
+        getCommand("aspergescore").setExecutor(new CoreCommand(this));
+        getCommand("aspergescore").setTabCompleter(new CoreCommand(this));
+
+        getCommand("loadsb").setExecutor(new LoadSBCommand(this));
+        getCommand("loadsb").setTabCompleter(new LoadSBCommand(this));
 
     }
 
-    public void registerEvents(){
+    private void registerEvents(){
 
-        Bukkit.getPluginManager().registerEvents(new SetStartingValuesDB(this), this);
+        // Bukkit.getPluginManager().registerEvents(new SetStartingValuesDB(this), this);
+        Bukkit.getPluginManager().registerEvents(new ScoreboardPlayerQJEvent(this), this);
 
     }
 
@@ -37,7 +49,7 @@ public final class AspergesCore extends JavaPlugin {
         return database;
     }
 
-    public void registerDB(){
+    private void registerDB(){
 
         try {
             this.database = new Database(this);
@@ -53,16 +65,28 @@ public final class AspergesCore extends JavaPlugin {
         }
     }
 
-    public void registerAll(){
+    private void registerConfigs(){
+
+        SBFilesManager sbF = SBFilesManager.getInstance();
+        sbF.setup(this);
+        saveDefaultConfig();
+        sbF.getData().options().copyDefaults(true);
+
+    }
+
+    private void registerAll(){
 
         registerCommands();
         registerEvents();
+
+        registerConfigs();
 
 
     }
 
     @Override
     public void onEnable() {
+        instance = this;
         registerAll();
 
         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + versionplugin + "&r &f»&r &aENABLED!&r");
@@ -72,7 +96,8 @@ public final class AspergesCore extends JavaPlugin {
     @Override
     public void onDisable() {
 
-        database.closeConnection();
+        // database.closeConnection();
+        SBFilesManager.getInstance().saveData();
 
         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + versionplugin + "&r &f»&r &cDISABLED!&r");
     }
