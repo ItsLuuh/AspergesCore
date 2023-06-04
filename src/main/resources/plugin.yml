@@ -1,0 +1,6 @@
+name: AspergesCore
+version: '${project.version}'
+main: core.luuh.aspergescore.AspergesCore
+api-version: 1.19
+depend:
+  - VerionCore
