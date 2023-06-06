@@ -30,7 +30,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
         List<String> list = RCUtils.readList("scoreboards");
         if(list.contains(name)){
-            // creates thes scoreboard
+            // creates the scoreboard
             SBManager sb = SBManager.createScore(player);
 
             // gets the instance of SBFilesManager
@@ -59,7 +59,10 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                 sb.setTitle(title);
 
                 // add the list "lines" to the scoreboard
-                sb.setSlotsFromList(lines);
+                sb.setSlotsFromList(lines, player);
+
+                // binds player to scoreboard name
+                SBManager.setScoreNameOfPlayerInHM(player, name);
             } else {
                 VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
             }

@@ -1,5 +1,6 @@
 package core.luuh.aspergescore.utils.scoreboard;
 
+import core.luuh.aspergescore.utils.RCUtils;
 import core.luuh.aspergescore.utils.chatcolor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,6 +21,25 @@ import java.util.UUID;
  *
  */
 public class SBManager {
+
+    private static HashMap<Player, String> scoreName = new HashMap<>();;
+
+    // gets the name of the scoreboard of the player using HashMap
+    public static String getScoreNameOfPlayerByHM(Player player) {
+        return scoreName.get(player);
+    }
+
+    // binds the scoreboard name to player
+    public static void setScoreNameOfPlayerInHM(Player player, String score) {
+        if (RCUtils.readList("scoreboards").contains(score)) {
+            scoreName.put(player, score);
+        }
+    }
+
+    // unbinds the scoreboard name from player
+    public static void removeScoreNameOfPlayerInHM(Player player) {
+        scoreName.remove(player);
+    }
 
     private static HashMap<UUID, SBManager> players = new HashMap<>();
 
@@ -72,14 +92,14 @@ public class SBManager {
      * Don't go below 1 in the int slot, otherwise it will be seen as null
      *
      */
-    public void setSlot(int slot, String text) {
+    public void setSlot(int slot, String text, Player player) {
         Team team = scoreboard.getTeam("SLOT_" + slot);
         String entry = genEntry(slot);
         if(!scoreboard.getEntries().contains(entry)) {
             sidebar.getScore(entry).setScore(slot);
         }
 
-        text = chatcolor.col(text);
+        text = chatcolor.all(player, text);
         String pre = getFirstSplit(text);
         String suf = getFirstSplit(ChatColor.getLastColors(pre) + getSecondSplit(text));
         team.setPrefix(pre);
@@ -95,7 +115,7 @@ public class SBManager {
     }
 
     // sets slots from a created list
-    public void setSlotsFromList(List<String> list) {
+    public void setSlotsFromList(List<String> list, Player player) {
         while(list.size()>15) {
             list.remove(list.size()-1);
         }
@@ -109,7 +129,7 @@ public class SBManager {
         }
 
         for(String line : list) {
-            setSlot(slot, line);
+            setSlot(slot, line, player);
             slot--;
         }
     }

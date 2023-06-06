@@ -3,8 +3,6 @@ package core.luuh.aspergescore.db;
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.model.PlayerStats;
 import core.luuh.verioncore.VerionAPIManager;
-import core.luuh.verioncore.VerionCore;
-import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 

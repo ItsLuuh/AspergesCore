@@ -3,7 +3,6 @@ package core.luuh.aspergescore.scoreboard;
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.scoreboard.SBManager;
 import org.bukkit.Bukkit;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,6 +34,9 @@ public class ScoreboardPlayerQJEvent implements Listener {
         Player player = e.getPlayer();
         if(SBManager.hasScore(player)){
             SBManager.removeScore(player);
+        }
+        if (SBManager.getScoreNameOfPlayerByHM(player) != null) {
+            SBManager.removeScoreNameOfPlayerInHM(player);
         }
 
     }
