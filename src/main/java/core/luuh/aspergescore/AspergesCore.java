@@ -37,6 +37,12 @@ public final class AspergesCore extends JavaPlugin {
         return database;
     }
 
+    static AspergesCore instance;
+
+    public static AspergesCore getInstance() {
+        return AspergesCore.instance;
+    }
+
     public void registerDB(){
 
         try {
@@ -63,6 +69,7 @@ public final class AspergesCore extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         registerAll();
 
         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + versionplugin + "&r &f»&r &aENABLED!&r");
