@@ -56,8 +56,14 @@ public final class AspergesCore extends JavaPlugin
     public Database getDatabase() {
         return this.database;
     }
-    
-    private void registerDB() {
+
+    static AspergesCore instance;
+
+    public static AspergesCore getInstance() {
+        return AspergesCore.instance;
+    }
+
+    public void registerDB(){
         try {
             (database = new Database(this)).initializeDatabase();
         }
