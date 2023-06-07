@@ -4,3 +4,13 @@ main: core.luuh.aspergescore.AspergesCore
 api-version: 1.19
 depend:
   - VerionCore
+  - PlaceholderAPI
+commands:
+  aspergescore:
+    description: Manages core reloads.
+    aliases:
+      - ac
+      - aspergesc
+      - acore
+  loadsb:
+    description: Loads scoreboard to a specific player.

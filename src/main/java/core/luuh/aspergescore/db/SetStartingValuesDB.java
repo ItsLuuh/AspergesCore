@@ -1,4 +1,4 @@
-package core.luuh.aspergescore.events;
+package core.luuh.aspergescore.db;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.model.PlayerStats;
@@ -16,6 +16,7 @@ public class SetStartingValuesDB implements Listener {
     private final AspergesCore plugin;
 
     public SetStartingValuesDB(AspergesCore plugin) {this.plugin = plugin;}
+
 
     @EventHandler
     public void onJoinEvent(PlayerJoinEvent e){

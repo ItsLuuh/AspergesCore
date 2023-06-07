@@ -1,0 +1,9 @@
+default-scoreboard:
+  title:
+    text:
+      - 'Title Scoreboard'
+    interval: 10
+  line-one:
+    text:
+      - 'test'
+    interval: 10
