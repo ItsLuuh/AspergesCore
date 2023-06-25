@@ -14,3 +14,18 @@ commands:
       - acore
   loadsb:
     description: Loads scoreboard to a specific player.
+    aliases:
+      - lsb
+      - asb
+      - sb
+  itemlore:
+    description: Manages item's name, lore and nbt.
+    aliases:
+      - ilore
+      - iteml
+      - il
+      - item
+  rename:
+    description: Renames item.
+  lore:
+    description: Manages item's lore.

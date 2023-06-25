@@ -16,6 +16,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
@@ -23,53 +24,6 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
     public LoadSBCommand(AspergesCore plugin) {
         this.plugin = plugin;
-    }
-
-    // gets the scoreboard from list of scoreboards and if it exists, it creates the scoreboard for the player
-    private void createSBFromName(Player player, String name){
-
-        List<String> list = RCUtils.readList("scoreboards");
-        if(list.contains(name)){
-            // creates the scoreboard
-            SBManager sb = SBManager.createScore(player);
-
-            // gets the instance of SBFilesManager
-            SBFilesManager sbF = SBFilesManager.getInstance();
-
-            // gets the ConfigurationSection with the name of the scoreboard
-            ConfigurationSection sbN = sbF.getData().getConfigurationSection(name);
-            if(sbN != null) {
-                String title = sbN.getStringList("title.text").get(0);
-
-                // gets the lines, and then it adds them to the List<String> lines
-                List<String> lines = new ArrayList<>();
-                // sbN.getKeys(false) is used to get every line, since they are ConfigurationSection and not strings... they require this iteration
-                for (String s : sbN.getKeys(false)) {
-
-                    if (!s.equalsIgnoreCase("title")) {
-                        // gets the ConfigurationSection from the name of the lines using sbN
-                        ConfigurationSection cs = sbN.getConfigurationSection(s);
-                        lines.add(cs.getStringList("text").get(0));
-                    }
-
-                }
-
-
-                // sets the title of the scoreboard
-                sb.setTitle(title);
-
-                // add the list "lines" to the scoreboard
-                sb.setSlotsFromList(lines, player);
-
-                // binds player to scoreboard name
-                SBManager.setScoreNameOfPlayerInHM(player, name);
-            } else {
-                VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
-            }
-        } else {
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cDidn't find any scoreboard with such name. &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
-        }
-
     }
 
     @Override
@@ -92,7 +46,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                             SBManager.removeScore(player);
                         }
 
-                        createSBFromName(player, args[0]);
+                        SBManager.createSBFromName(player, args[0]);
 
                     } else {
                         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid second argument! &7(OFFLINE_PLAYER)&r");
@@ -120,7 +74,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                             SBManager.removeScore(player);
                         }
 
-                        createSBFromName(player, args[0]);
+                        SBManager.createSBFromName(player, args[0]);
 
                     } else {
                         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid first argument! &7(INVALID-SCOREBOARD)&r");
@@ -134,7 +88,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                                 SBManager.removeScore(player);
                             }
 
-                            createSBFromName(Bukkit.getPlayer(args[1]), args[0]);
+                            SBManager.createSBFromName(Bukkit.getPlayer(args[1]), args[0]);
 
                         } else {
                             VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid second argument! &7(OFFLINE_PLAYER)&r");

@@ -10,8 +10,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.NotNull;
 
-
-import javax.annotation.Nullable;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -19,7 +17,7 @@ public class NBTUtils {
     
     private static final AspergesCore plugin = AspergesCore.getInstance();
 
-    public static @Nullable String getNBT(@NotNull ItemStack item, String key) {
+    public static String getNBT(@NotNull ItemStack item, String key) {
 
         Objects.requireNonNull(item,"item must not be null");
         if(!item.hasItemMeta()) return null;
@@ -32,7 +30,7 @@ public class NBTUtils {
         return null;
     }
 
-    public static @Nullable String getNBT(@NotNull Entity entity, String key) {
+    public static String getNBT(@NotNull Entity entity, String key) {
 
         Objects.requireNonNull(entity,"entity must not be null");
         PersistentDataContainer pdc = entity.getPersistentDataContainer();
