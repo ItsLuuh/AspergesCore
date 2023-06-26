@@ -26,4 +26,8 @@ public class RCUtils {
     public static Integer readInt(String path){
         return plugin.getConfig().getInt(path);
     }
+
+    public static Double readDouble(String path){
+        return plugin.getConfig().getDouble(path);
+    }
 }

@@ -29,3 +29,5 @@ commands:
     description: Renames item.
   lore:
     description: Manages item's lore.
+  ast:
+    description: Testing player's yaw

@@ -3,8 +3,10 @@ package core.luuh.aspergescore;
 import core.luuh.aspergescore.itemlore.ItemLoreCommand;
 import core.luuh.aspergescore.itemlore.LoreCommand;
 import core.luuh.aspergescore.itemlore.RenameCommand;
+import core.luuh.aspergescore.pets.PetStandQJEvent;
 import core.luuh.aspergescore.scoreboard.SwitchWorldEvent;
 import core.luuh.aspergescore.utils.Ticker;
+import core.luuh.aspergescore.utils.pets.PSManager;
 import org.bukkit.scheduler.BukkitRunnable;
 import core.luuh.aspergescore.utils.scoreboard.SBManager;
 import org.bukkit.entity.Player;
@@ -51,6 +53,7 @@ public final class AspergesCore extends JavaPlugin {
     private void registerEvents() {
         Bukkit.getPluginManager().registerEvents(new ScoreboardPlayerQJEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new SwitchWorldEvent(this), this);
+        Bukkit.getPluginManager().registerEvents(new PetStandQJEvent(this), this);
     }
     
     public Database getDatabase() {
@@ -82,27 +85,45 @@ public final class AspergesCore extends JavaPlugin {
         registerConfigs();
     }
 
+    private double petHeight = 0.01;
+    private boolean isAscending = true;
+
     public void onTick(){
-        registerScoreUpdate();
+        if (isAscending) {
+            petHeight += 0.01;
+            if (petHeight >= 0.35) {
+                isAscending = false;
+            }
+        } else {
+            petHeight -= 0.01;
+            if (petHeight <= 0.0) {
+                isAscending = true;
+            }
+        }
+
+        for(Player player : Bukkit.getOnlinePlayers()){
+
+            registerScoreUpdate(player);
+            PSManager.updatePSPosOfPlayer(player, petHeight);
+
+        }
     }
 
 
-    public void registerScoreUpdate() {
+    public void registerScoreUpdate(Player player) {
 
-        for (Player player : Bukkit.getOnlinePlayers()) {
+        SBManager sbM = SBManager.getByPlayer(player);
+        int i = 15;
+        for (String s : sbM.getLines(player)) {
 
-            SBManager sbM = SBManager.getByPlayer(player);
-            int i = 15;
-            for (String s : sbM.getLines(player)) {
+            if (i == 0) break;
 
-                if(i==0)break;
+            SBManager.scoreUpdateTask(player, s, i);
 
-                SBManager.scoreUpdateTask(player, s, i);
+            i--;
 
-                i--;
-
-            }
         }
+
 
     }
 
