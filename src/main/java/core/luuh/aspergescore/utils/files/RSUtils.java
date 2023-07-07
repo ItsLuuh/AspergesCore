@@ -1,7 +1,5 @@
-package core.luuh.aspergescore.utils;
+package core.luuh.aspergescore.utils.files;
 
-import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.scoreboard.SBFilesManager;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -9,9 +7,9 @@ import java.util.List;
 
 public class RSUtils {
 
-    // Read from Config Utils
+    // Read from Scoreboards Utils
 
-    private static final SBFilesManager plugin = SBFilesManager.getInstance();
+    private static final SBFileManager plugin = SBFileManager.getInstance();
 
     public static List<ConfigurationSection> readCS(String path){
 

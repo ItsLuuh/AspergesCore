@@ -1,8 +1,7 @@
-package core.luuh.aspergescore.utils.pets;
+package core.luuh.aspergescore.utils;
 
-import core.luuh.aspergescore.utils.RCUtils;
+import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.aspergescore.utils.chatcolor;
-import core.luuh.aspergescore.utils.scoreboard.SBManager;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Color;
 import org.bukkit.Location;
@@ -17,13 +16,14 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.UUID;
 
 public class PSManager {
 
     private static final HashMap<UUID, ArmorStand> petStand = new HashMap<>();
 
+
+    // creates the PetStand for Player
     public static void createPSofPlayer(Player player){
 
         Location playerLocation = player.getLocation();
@@ -55,11 +55,13 @@ public class PSManager {
 
     }
 
+    // changes position of PetStand
     public static void updatePSPosOfPlayer(Player player) {
         double height = 0.0; // Default Height
         updatePSPosOfPlayer(player, height);
     }
 
+    // changes position of PetStand including height
     public static void updatePSPosOfPlayer(Player player, double height) {
         ArmorStand armorStand = getPSbyPlayer(player);
         Location playerLocation = player.getLocation();
@@ -76,6 +78,7 @@ public class PSManager {
         particleGenerator(armorStand);
     }
 
+    // makes the particles under the pet
     private static void particleGenerator(ArmorStand armorStand){
 
         Location particleLocation = armorStand.getLocation().clone().subtract(0, RCUtils.readDouble("pet-particle-height"), 0);
@@ -84,12 +87,14 @@ public class PSManager {
 
     }
 
+    // add PetStand to Player
     public static void boundPStoPlayer(Player player, ArmorStand armorStand){
 
         petStand.put(player.getUniqueId(), armorStand);
 
     }
 
+    // removes PetStand from Player
     public static void unboundPSfromPlayer(Player player){
 
 
@@ -98,12 +103,14 @@ public class PSManager {
 
     }
 
+    // gets a PetStand from Player
     public static ArmorStand getPSbyPlayer(Player player){
 
         return petStand.get(player.getUniqueId());
 
     }
 
+    // removes every ArmorStand in PetStand HashMap
     public static void removeAllPS(){
 
         for (UUID key : petStand.keySet()) {

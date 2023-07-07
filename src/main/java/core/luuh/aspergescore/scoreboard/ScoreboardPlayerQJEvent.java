@@ -1,7 +1,7 @@
 package core.luuh.aspergescore.scoreboard;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.scoreboard.SBManager;
+import core.luuh.aspergescore.utils.SBManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

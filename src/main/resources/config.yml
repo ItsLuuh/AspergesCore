@@ -1,3 +1,31 @@
+## GENERAL ##
+
 prefix: ''
 scoreboards:
   - default-scoreboard
+
+## MYSQL ##
+
+database: 'players_stats'
+username: 'root'
+password: ''
+
+## PETS ##
+
+pet-distance: 1.0
+# The distance of the armorstand from the player
+
+pet-general-offset: 0.5
+# The general offset of the armorstand from player (positive for right, negative for left)
+
+pet-height-offset: -0.65
+# The height offset of the armorstand from it's position
+
+pet-particle-height: -1.45
+# The height of the particle of the armorstand (bounded to position of the armorstand)
+
+mythicmobs-mob-display-template: '&8« &f%mob% &e%mob_health% &8»'
+# The template to use to set mobs display name
+
+mythicmobs-boss-display-template: '&8« &f%mob% &e%mob_health% &8»'
+# The template to use to set bosses display name

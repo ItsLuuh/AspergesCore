@@ -2,6 +2,7 @@ package core.luuh.aspergescore.itemlore;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -30,7 +31,7 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou can't do this command on console!&r");
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
 
         } else {
 
@@ -53,8 +54,11 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
                 String text = chatcolor.col(message.toString());
                 itemMeta.setDisplayName(text);
                 item.setItemMeta(itemMeta);
+                player.sendMessage(chatcolor.col(MTUtils.readString("item-rename")));
 
             } else {
+
+                player.sendMessage(chatcolor.col(MTUtils.readString("error-invalid-item")));
 
             }
 

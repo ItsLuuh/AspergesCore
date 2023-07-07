@@ -46,7 +46,7 @@ public class chatcolor {
 
     public static String col(String message){
 
-        return hex(chat(message));
+        return hex(chat(repCompToLegacy(message)));
 
     }
 

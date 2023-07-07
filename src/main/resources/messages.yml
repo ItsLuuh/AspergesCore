@@ -1,0 +1,45 @@
+## CASE ERROR MESSAGES ##
+
+error-console-execute: ''
+not-enough-arguments: ''
+not-enough-perms: ''
+invalid-player: ''
+invalid-arg: ''
+
+## CORE COMMAND ##
+
+core-default-mex:
+  - ''
+  - '&6[&e!&6] &lASPERGES&r &fCore &ov%version% &6[&e!&6]'
+  - '&fBy ItsLuuh.'
+  - ''
+
+core-reload-all: ''
+core-reload-config: ''
+core-reload-scoreboards: ''
+core-reload-messages: ''
+
+## LOADSB ##
+
+sb-updated: ''
+
+## ITEM LORE ##
+
+error-invalid-item: ''
+item-rename: ''
+item-lore-add: ''
+item-lore-set: ''
+item-lore-reset: ''
+item-lore-remove: ''
+item-lore-remove-too-big-arg: ''
+item-lore-no-lore: ''
+item-glow-add: ''
+item-glow-remove: ''
+item-enchants-hide: ''
+item-enchants-remove: ''
+
+## HEALTH ##
+
+health-maxhealth-set: ''
+health-scale-set: ''
+health-health-set: ''

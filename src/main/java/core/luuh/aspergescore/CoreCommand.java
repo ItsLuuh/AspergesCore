@@ -1,7 +1,9 @@
 package core.luuh.aspergescore;
 
 import core.luuh.aspergescore.utils.chatcolor;
-import core.luuh.aspergescore.utils.scoreboard.SBFilesManager;
+import core.luuh.aspergescore.utils.files.MTUtils;
+import core.luuh.aspergescore.utils.files.MexFileManager;
+import core.luuh.aspergescore.utils.files.SBFileManager;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -29,36 +31,42 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
             if(args.length == 0) {
 
-                VerionAPIManager.logConsole("");
-                VerionAPIManager.logConsole("&6[&e!&6] &lASPERGES&r &fCore &ov" + plugin.getVersionPlugin() + " &6[&e!&6]");
-                VerionAPIManager.logConsole("&fBy ItsLuuh.");
-                VerionAPIManager.logConsole("");
+                for(String s : MTUtils.readList("core-default-mex")){
+
+                    VerionAPIManager.logConsole(AspergesCore.replaceCustomPlaceHolders(s));
+
+                }
 
             } else if(args.length == 1) {
 
-                SBFilesManager.getInstance().reloadData();
+                SBFileManager.getInstance().reloadData();
+                MexFileManager.getInstance().reloadData();
                 plugin.reloadConfig();
-                VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a All configs reloaded successfully!&r");
+                VerionAPIManager.logConsole(MTUtils.readString("core-reload-all"));
 
             } else if(args.length == 2) {
 
                 if(args[1].equalsIgnoreCase("all")){
 
-                    SBFilesManager.getInstance().reloadData();
+                    SBFileManager.getInstance().reloadData();
+                    MexFileManager.getInstance().reloadData();
                     plugin.reloadConfig();
-                    VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a All configs reloaded successfully!&r");
-
-                } else if(args[1].equalsIgnoreCase("scoreboards")) {
-
-                    SBFilesManager.getInstance().reloadData();
-                    plugin.reloadConfig();
-                    VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a Scoreboard Config reloaded successfully!&r");
+                    VerionAPIManager.logConsole(MTUtils.readString("core-reload-all"));
 
                 } else if(args[1].equalsIgnoreCase("config")){
 
-                    SBFilesManager.getInstance().reloadData();
                     plugin.reloadConfig();
-                    VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a Main Config reloaded successfully!&r");
+                    VerionAPIManager.logConsole(MTUtils.readString("core-reload-config"));
+
+                } else if(args[1].equalsIgnoreCase("scoreboards")) {
+
+                    SBFileManager.getInstance().reloadData();
+                    VerionAPIManager.logConsole(MTUtils.readString("core-reload-scoreboards"));
+
+                } else if(args[1].equalsIgnoreCase("messages")){
+
+                    MexFileManager.getInstance().reloadData();
+                    VerionAPIManager.logConsole(MTUtils.readString("core-reload-messages"));
 
                 }
 
@@ -72,36 +80,42 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                 if(args.length == 0) {
 
-                    player.sendMessage(chatcolor.col(""));
-                    player.sendMessage(chatcolor.col("&6[&e!&6] &lASPERGES&r &fCore &ov" + plugin.getVersionPlugin() + " &6[&e!&6]"));
-                    player.sendMessage(chatcolor.col("&fBy ItsLuuh."));
-                    player.sendMessage(chatcolor.col(""));
+                    for(String s : MTUtils.readList("core-default-mex")){
+
+                        player.sendMessage(chatcolor.col(AspergesCore.replaceCustomPlaceHolders(s)));
+
+                    }
 
                 } else if(args.length == 1) {
 
-                    SBFilesManager.getInstance().reloadData();
+                    MexFileManager.getInstance().reloadData();
+                    SBFileManager.getInstance().reloadData();
                     plugin.reloadConfig();
-                    player.sendMessage(chatcolor.col("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a All configs reloaded successfully!&r"));
+                    player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-all")));
 
                 } else if(args.length == 2) {
 
                     if(args[1].equalsIgnoreCase("all")){
 
-                        SBFilesManager.getInstance().reloadData();
+                        SBFileManager.getInstance().reloadData();
+                        MexFileManager.getInstance().reloadData();
                         plugin.reloadConfig();
-                        player.sendMessage(chatcolor.col("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a All configs reloaded successfully!&r"));
-
-                    } else if(args[1].equalsIgnoreCase("scoreboards")) {
-
-                        SBFilesManager.getInstance().reloadData();
-                        plugin.reloadConfig();
-                        player.sendMessage(chatcolor.col("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a Scoreboard Config reloaded successfully!&r"));
+                        player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-all")));
 
                     } else if(args[1].equalsIgnoreCase("config")){
 
-                        SBFilesManager.getInstance().reloadData();
                         plugin.reloadConfig();
-                        player.sendMessage(chatcolor.col("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&a Main Config reloaded successfully!&r"));
+                        player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-config")));
+
+                    } else if(args[1].equalsIgnoreCase("scoreboards")) {
+
+                        SBFileManager.getInstance().reloadData();
+                        player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-scoreboards")));
+
+                    } else if(args[1].equalsIgnoreCase("messages")){
+
+                        MexFileManager.getInstance().reloadData();
+                        player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-messages")));
 
                     }
 
@@ -117,22 +131,20 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
     @Override
     public @Nullable List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
+        List<String> arguments = new ArrayList<>();
         if(args.length == 1) {
 
-            List<String> arguments = new ArrayList<>();
             arguments.add("reload");
-            return arguments;
 
         } else if (args.length == 2) {
 
-            List<String> arguments = new ArrayList<>();
             arguments.add("all");
             arguments.add("config");
             arguments.add("scoreboards");
-            return arguments;
+            arguments.add("messages");
 
         }
 
-        return null;
+        return arguments;
     }
 }

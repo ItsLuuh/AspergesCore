@@ -2,6 +2,7 @@ package core.luuh.aspergescore.itemlore;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -31,7 +32,7 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou can't do this command on console!&r");
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
 
         } else {
 
@@ -55,6 +56,7 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
 
                         String text = message.toString();
                         addLore(text, item);
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-add")));
                     } else if (args[0].equalsIgnoreCase("set") && args.length >= 3) {
 
                         StringBuilder message = new StringBuilder();
@@ -64,6 +66,7 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
                             message.append(" ");
                             message.append(args[i]);
                         }
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-set")));
 
                         setLore(args, item, message, Integer.parseInt(args[1]) -1);
                     } else if (args[0].equalsIgnoreCase("remove")) {
@@ -76,10 +79,13 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
                                 lore.remove(i-1);
                                 itemMeta.setLore(lore);
                                 item.setItemMeta(itemMeta);
+                                player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove")));
                             } else {
-
+                                player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove-too-big-arg")));
                             }
                         } else {
+
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-no-lore")));
 
                         }
                     }

@@ -1,22 +1,21 @@
 package core.luuh.aspergescore.scoreboard;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.RCUtils;
-import core.luuh.aspergescore.utils.scoreboard.SBFilesManager;
-import core.luuh.aspergescore.utils.scoreboard.SBManager;
+import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.MTUtils;
+import core.luuh.aspergescore.utils.files.RCUtils;
+import core.luuh.aspergescore.utils.SBManager;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
@@ -33,7 +32,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
             if(args.length == 0 || args.length == 1) {
 
-                VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
+                VerionAPIManager.logConsole(MTUtils.caseErrorMex("not-enough-arguments") +" &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
 
             } else if(args.length == 2){
 
@@ -47,12 +46,14 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                         }
 
                         SBManager.createSBFromName(player, args[0]);
+                        VerionAPIManager.logConsole(MTUtils.readString("sb-updated"));
+
 
                     } else {
-                        VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid second argument! &7(OFFLINE_PLAYER)&r");
+                        VerionAPIManager.logConsole(MTUtils.caseErrorMex("invalid-arg") +" &7(OFFLINE_PLAYER)&r");
                     }
                 } else {
-                    VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid first argument! &7(INVALID-SCOREBOARD)&r");
+                    VerionAPIManager.logConsole(MTUtils.caseErrorMex("invalid-arg") + " &7(INVALID-SCOREBOARD)&r");
                 }
             }
 
@@ -65,7 +66,7 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
 
                 if(args.length == 0){
 
-                    VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
+                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("not-enough-arguments") +" &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r"));
 
                 } else if(args.length == 1) {
                     if (RCUtils.readList("scoreboards").contains(args[0])) {
@@ -75,10 +76,10 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                         }
 
                         SBManager.createSBFromName(player, args[0]);
+                        player.sendMessage(chatcolor.col(MTUtils.readString("sb-updated")));
 
                     } else {
-                        VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid first argument! &7(INVALID-SCOREBOARD)&r");
-                    }
+                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg") + " &7(INVALID-SCOREBOARD)&r"));                    }
                 } else if (args.length == 2) {
 
                     if (RCUtils.readList("scoreboards").contains(args[0])) {
@@ -89,14 +90,15 @@ public class LoadSBCommand implements CommandExecutor, TabCompleter {
                             }
 
                             SBManager.createSBFromName(Bukkit.getPlayer(args[1]), args[0]);
+                            player.sendMessage(chatcolor.col(MTUtils.readString("sb-updated")));
+
 
                         } else {
-                            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid second argument! &7(OFFLINE_PLAYER)&r");
+                            player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg") +" &7(OFFLINE_PLAYER)&r"));
                         }
 
                     } else {
-                        VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set a valid first argument! &7(INVALID-SCOREBOARD)&r");
-                    }
+                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg") + " &7(INVALID-SCOREBOARD)&r"));                        }
                 }
             }
         }

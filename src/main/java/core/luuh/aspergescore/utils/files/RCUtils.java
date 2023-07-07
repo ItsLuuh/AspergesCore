@@ -1,4 +1,4 @@
-package core.luuh.aspergescore.utils;
+package core.luuh.aspergescore.utils.files;
 
 import core.luuh.aspergescore.AspergesCore;
 import org.bukkit.configuration.ConfigurationSection;

@@ -1,20 +1,15 @@
-package core.luuh.aspergescore.utils.scoreboard;
+package core.luuh.aspergescore.utils;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.RCUtils;
-import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.RCUtils;
+import core.luuh.aspergescore.utils.files.SBFileManager;
 import core.luuh.verioncore.VerionAPIManager;
-import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.TextComponent;
-import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
@@ -35,7 +30,7 @@ public class SBManager {
 
     private static final HashMap<Player, String> scoreName = new HashMap<>();
 
-    // gets the name of the scoreboard of the player using HashMap
+    // get the name of the scoreboard of the player using HashMap
     public static String getScoreNameOfPlayerByHM(Player player) {
         return scoreName.get(player);
     }
@@ -54,22 +49,22 @@ public class SBManager {
 
     private static final HashMap<UUID, SBManager> players = new HashMap<>();
 
-    // check if the player has already a scoreboard
+    // checks if the player has already a scoreboard
     public static boolean hasScore(Player player) {
         return players.containsKey(player.getUniqueId());
     }
 
-    // Method, creates a scoreboard for the player
+    // Method, creates a scoreboard for Player
     public static SBManager createScore(Player player) {
         return new SBManager(player);
     }
 
-    // gets the scoreboard from the player
+    // get the scoreboard from Player
     public static SBManager getByPlayer(Player player) {
         return players.get(player.getUniqueId());
     }
 
-    // removes a scoreboard from the player
+    // removes a scoreboard from Player
     public static SBManager removeScore(Player player) {
         return players.remove(player.getUniqueId());
     }
@@ -77,7 +72,7 @@ public class SBManager {
     private final Scoreboard scoreboard;
     private final Objective sidebar;
 
-    // Constructor, creates the scoreboard for the player
+    // Constructor, creates the scoreboard for Player
     private SBManager(Player player) {
         scoreboard = Bukkit.getScoreboardManager().getNewScoreboard();
         sidebar = scoreboard.registerNewObjective("sidebar", "dummy");
@@ -161,6 +156,7 @@ public class SBManager {
     }
      */
 
+    // updates line for player
     public static void scoreUpdateTask(Player player, String line, Integer slot){
 
         SBManager sbM = SBManager.getByPlayer(player);
@@ -182,7 +178,7 @@ public class SBManager {
     public long getLineInterval(Player player, String line){
 
         if (SBManager.hasScore(player)) {
-            SBFilesManager sbF = SBFilesManager.getInstance();
+            SBFileManager sbF = SBFileManager.getInstance();
             String name = SBManager.getScoreNameOfPlayerByHM(player);
             ConfigurationSection sbN = sbF.getData().getConfigurationSection(name);
             ConfigurationSection cs = sbN.getConfigurationSection(line);
@@ -198,7 +194,7 @@ public class SBManager {
     public List<String> getTextsLine(Player player, String line){
 
         if (SBManager.hasScore(player)) {
-            SBFilesManager sbF = SBFilesManager.getInstance();
+            SBFileManager sbF = SBFileManager.getInstance();
             String name = SBManager.getScoreNameOfPlayerByHM(player);
             ConfigurationSection sbN = sbF.getData().getConfigurationSection(name);
             ConfigurationSection cs = sbN.getConfigurationSection(line);
@@ -214,7 +210,7 @@ public class SBManager {
     public @NotNull Set<String> getLines(Player player){
 
         if (SBManager.hasScore(player)) {
-            SBFilesManager sbF = SBFilesManager.getInstance();
+            SBFileManager sbF = SBFileManager.getInstance();
             String name = SBManager.getScoreNameOfPlayerByHM(player);
             ConfigurationSection sbN = sbF.getData().getConfigurationSection(name);
 
@@ -250,17 +246,6 @@ public class SBManager {
         return ChatColor.values()[slot].toString();
     }
 
-    private String getFirstSplit(String s) {
-        return s.length()>64 ? s.substring(0, 64) : s;
-    }
-
-    private String getSecondSplit(String s) {
-        if(s.length()>128) {
-            s = s.substring(0, 128);
-        }
-        return s.length()>64 ? s.substring(64) : "";
-    }
-
     // gets the scoreboard from list of scoreboards and if it exists, it creates the scoreboard for the player
     public static void createSBFromName(Player player, String name){
 
@@ -287,7 +272,7 @@ public class SBManager {
         SBManager sb = SBManager.createScore(player);
 
         // gets the instance of SBFilesManager
-        SBFilesManager sbF = SBFilesManager.getInstance();
+        SBFileManager sbF = SBFileManager.getInstance();
 
         // gets the ConfigurationSection with the name of the scoreboard
         ConfigurationSection sbN = sbF.getData().getConfigurationSection(s);
@@ -319,6 +304,24 @@ public class SBManager {
         } else {
             VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
         }
+
+    }
+
+    // updates scores for Player
+    public static void registerScoreUpdate(Player player) {
+
+        SBManager sbM = getByPlayer(player);
+        int i = 15;
+        for (String s : sbM.getLines(player)) {
+
+            if (i == 0) break;
+
+            scoreUpdateTask(player, s, i);
+
+            i--;
+
+        }
+
 
     }
 

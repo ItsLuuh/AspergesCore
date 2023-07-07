@@ -1,9 +1,37 @@
+per-world:
+  world_the_end:
+    title:
+      text:
+        - Test title
+    test1:
+      text:
+        - Test text 1
+    test2:
+      text:
+        - Text text 2
+
 default-scoreboard:
   title:
     text:
-      - 'Title Scoreboard'
-    interval: 10
+      - <gradient:#FF0000:#FF3D3D>&lASPERGES</gradient>
+  date:
+    text:
+      - '&7&o%localtime_time_dd/MM/yy% &8Lobby'
   line-one:
     text:
-      - 'test'
-    interval: 10
+      - ''
+  line-polus:
+    text:
+      - 'Polus: <gradient:gold:yellow>100,304,104</gradient>'
+  line-two:
+    text:
+      - ''
+  line-ip:
+    text:
+      - '&7&oplay.verionmc.eu'
+
+
+
+
+
+

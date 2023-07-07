@@ -1,15 +1,14 @@
 package core.luuh.aspergescore.scoreboard;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.RSUtils;
-import core.luuh.aspergescore.utils.scoreboard.SBManager;
+import core.luuh.aspergescore.utils.files.RSUtils;
+import core.luuh.aspergescore.utils.SBManager;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
-import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 

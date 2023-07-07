@@ -1,4 +1,4 @@
-package core.luuh.aspergescore.utils.scoreboard;
+package core.luuh.aspergescore.utils.files;
 
 import core.luuh.aspergescore.AspergesCore;
 import org.bukkit.Bukkit;
@@ -10,14 +10,14 @@ import org.bukkit.plugin.Plugin;
 import java.io.File;
 import java.io.IOException;
 
-public class SBFilesManager {
+public class MexFileManager {
 
     private final AspergesCore plugin = AspergesCore.getInstance();
 
-    static SBFilesManager instance = new SBFilesManager();
+    static MexFileManager instance = new MexFileManager();
 
 
-    public static SBFilesManager getInstance() {
+    public static MexFileManager getInstance() {
         return instance;
     }
 
@@ -31,20 +31,20 @@ public class SBFilesManager {
             p.getDataFolder().mkdir();
         }
 
-        dfile = new File(p.getDataFolder(), "scoreboards.yml");
+        dfile = new File(p.getDataFolder(), "messages.yml");
 
         if (!dfile.exists()) {
             try {
                 dfile.createNewFile();
             } catch (IOException e) {
-                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create scoreboards.yml!");
+                Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not create messages.yml!");
             }
         }
 
         dataconfig = YamlConfiguration.loadConfiguration(dfile);
     }
 
-    public FileConfiguration getData() {
+    public FileConfiguration getMessages() {
         return dataconfig;
     }
 
@@ -52,7 +52,7 @@ public class SBFilesManager {
         try {
             dataconfig.save(dfile);
         } catch (IOException e) {
-            Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save scoreboards.yml");
+            Bukkit.getServer().getLogger().severe(ChatColor.RED + "Could not save messages.yml");
         }
     }
 

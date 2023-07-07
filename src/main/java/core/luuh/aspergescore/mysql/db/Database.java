@@ -1,7 +1,9 @@
-package core.luuh.aspergescore.db;
+package core.luuh.aspergescore.mysql.db;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.model.PlayerStats;
+import core.luuh.aspergescore.mysql.model.PlayerStats;
+import core.luuh.aspergescore.utils.files.MTUtils;
+import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
 
 import java.sql.*;
@@ -20,9 +22,9 @@ public class Database {
             return connection;
         }
 
-        String url = "jdbc:mysql://localhost/players_stats";
-        String user = "root";
-        String password = "";
+        String url = "jdbc:mysql://localhost/" + RCUtils.readString("database");
+        String user = RCUtils.readString("username");
+        String password = RCUtils.readString("password");
 
         this.connection = DriverManager.getConnection(url, user, password);
 

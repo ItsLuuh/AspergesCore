@@ -1,7 +1,7 @@
 package core.luuh.aspergescore.pets;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.utils.pets.PSManager;
+import core.luuh.aspergescore.utils.PSManager;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;

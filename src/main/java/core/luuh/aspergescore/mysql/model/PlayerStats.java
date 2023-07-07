@@ -1,4 +1,4 @@
-package core.luuh.aspergescore.model;
+package core.luuh.aspergescore.mysql.model;
 
 import java.util.Date;
 

@@ -1,7 +1,7 @@
-package core.luuh.aspergescore.db;
+package core.luuh.aspergescore.mysql.db;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.model.PlayerStats;
+import core.luuh.aspergescore.mysql.model.PlayerStats;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

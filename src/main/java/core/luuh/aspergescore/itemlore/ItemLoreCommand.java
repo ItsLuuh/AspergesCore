@@ -2,10 +2,10 @@ package core.luuh.aspergescore.itemlore;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.NBTUtils;
-import core.luuh.aspergescore.utils.RCUtils;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.MTUtils;
+import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
-import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,6 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou can't do this command on console!&r");
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
 
         } else {
 
@@ -58,13 +57,13 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
             if(player.getInventory().getItemInMainHand().equals(Material.AIR)){
 
-                VerionAPIManager.logConsole("test");
+                player.sendMessage(chatcolor.col(MTUtils.readString("error-invalid-item")));
 
             } else {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (args.length == 0) {
 
-                    VerionAPIManager.logConsole("Args Length 0");
+                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("not-enough-arguments")));
 
                 } else if (args[0].equalsIgnoreCase("rename") && args.length >= 2){
 
@@ -81,6 +80,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                     String text = chatcolor.col(message.toString());
                     itemMeta.setDisplayName(text);
                     item.setItemMeta(itemMeta);
+                    player.sendMessage(chatcolor.col(MTUtils.readString("item-rename")));
 
                 } else if (args[0].equalsIgnoreCase("lore") && args.length >= 3) {
 
@@ -96,6 +96,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                         String text = message.toString();
                         LoreCommand.addLore(text, item);
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-add")));
                     } else if (args[1].equalsIgnoreCase("set") && args.length >= 4) {
 
                         StringBuilder message = new StringBuilder();
@@ -107,6 +108,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                         }
 
                         LoreCommand.setLore(args, item, message, Integer.parseInt(args[2]));
+                        player.sendMessage(chatcolor.col(RCUtils.readString("item-lore-set")));
                     }
                 } else if (args[0].equalsIgnoreCase("addlore") && args.length >= 2) {
 
@@ -120,6 +122,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                     String text = message.toString();
                     LoreCommand.addLore(text, item);
+                    player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-add")));
 
                 } else if (args.length == 1) {
 
@@ -127,17 +130,26 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                         case "resetlore":
 
-                            item.getItemMeta().lore(null);
+                            if(item.getItemMeta().hasLore()) {
+                                for (String s : item.getItemMeta().getLore()) {
+                                    item.getItemMeta().getLore().remove(s);
+                                }
+                            }
+
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-reset")));
+
 
                             break;
                         case "glow":
 
                             VerionAPIManager.setEnchanted(item, true);
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-glow-add")));
 
                             break;
                         case "removeglow":
 
                             VerionAPIManager.setEnchanted(item, false);
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-glow-remove")));
 
                             break;
                         case "hidenchants":
@@ -146,6 +158,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                             ItemMeta itemMeta = item.getItemMeta();
                             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             item.setItemMeta(itemMeta);
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-enchants-hide")));
 
                             break;
                         case "removenchants":
@@ -154,6 +167,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                             for(Enchantment e : item.getEnchantments().keySet()) {
                                 item.removeEnchantment(e);
                             }
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-enchants-remove")));
 
                             break;
 
@@ -165,6 +179,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                     if (args[0].equalsIgnoreCase("addlore")) {
 
                         LoreCommand.addLore(args, item);
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-add")));
 
                     } else if (args[0].equalsIgnoreCase("nbt")) {
 
@@ -178,20 +193,23 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                         if(args[1].equalsIgnoreCase("remove")) {
 
-                            if(item.getItemMeta().hasLore()) {
+                            if (item.getItemMeta().hasLore()) {
                                 ItemMeta itemMeta = item.getItemMeta();
                                 int i = Integer.parseInt(args[2]);
-                                if(i < item.getItemMeta().getLore().size()) {
+                                if (i < item.getItemMeta().getLore().size()) {
                                     List<String> lore = itemMeta.getLore();
-                                    lore.remove(i-1);
+                                    lore.remove(i - 1);
                                     itemMeta.setLore(lore);
                                     item.setItemMeta(itemMeta);
+                                    player.sendMessage(chatcolor.col("item-lore-remove"));
                                 } else {
-
+                                    player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove-too-big-arg")));
                                 }
-                            }
-                        } else {
+                            } else {
 
+                                player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-no-lore")));
+
+                            }
                         }
 
                     } else if(args[0].equalsIgnoreCase("nbt")) {
@@ -248,8 +266,6 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
             arguments.add("removeglow");
             arguments.add("hidenchants");
 
-            return arguments;
-
         } else if(args.length == 2){
 
             if(args[0].equalsIgnoreCase("rename"))arguments.add("(Name)");
@@ -268,7 +284,6 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                 arguments.add("remove");
 
             }
-            return arguments;
 
         } else if(args.length == 3){
             if(args[0].equalsIgnoreCase("lore")){
@@ -292,10 +307,9 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                 }
 
             }
-            return arguments;
         }
 
-        return null;
+        return arguments;
 
     }
 }

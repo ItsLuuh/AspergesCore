@@ -9,10 +9,10 @@ public class NumberFormatter {
             formattedNumber = String.format("%.0fB", number / 1_000_000_000);
         } else if (number >= 1_000_000) {
             formattedNumber = String.format("%.0fM", number / 1_000_000);
-        } else if (number >= 1_000) {
+        } else if (number >= 100_000) {
             formattedNumber = String.format("%.0fk", number / 1_000);
         } else {
-            formattedNumber = String.valueOf(number);
+            formattedNumber = String.valueOf(Math.round(number));
         }
 
         return formattedNumber;
