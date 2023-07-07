@@ -20,15 +20,13 @@ public class Database {
             return connection;
         }
 
-        String url = "jdbc:mysql://u2_lqVs16WmT3:O7bE5%3D%2BDHg3pjhDWPOe3gf%40G@192.168.50.36:3306/s2_player_stats";
-        String user = "u2_lqVs16WmT3";
-        String password = "O7bE5=+DHg3pjhDWPOe3gf@G";
+        String url = "jdbc:mysql://localhost/players_stats";
+        String user = "root";
+        String password = "";
 
-        Connection connection = null;
+        this.connection = DriverManager.getConnection(url, user, password);
 
-            connection = DriverManager.getConnection(url, user, password);
-
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &fConnected successfully to DB: &bplayer_stats&f!&r");
+        VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &fConnected successfully to DB: &bplayers_stats&f!&r");
 
 
         return this.connection;

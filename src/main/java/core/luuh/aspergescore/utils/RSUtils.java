@@ -42,4 +42,10 @@ public class RSUtils {
     public static Integer readInt(String path){
         return plugin.getData().getInt(path);
     }
+
+    public static void set(String path, Object value){
+        plugin.getData().set(path, value);
+        plugin.saveData();
+
+    }
 }

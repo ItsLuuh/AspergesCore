@@ -1,12 +1,17 @@
 package core.luuh.aspergescore;
 
+import core.luuh.aspergescore.db.SetStartingValuesDB;
+import core.luuh.aspergescore.health.CustomHealthCommand;
 import core.luuh.aspergescore.itemlore.ItemLoreCommand;
 import core.luuh.aspergescore.itemlore.LoreCommand;
 import core.luuh.aspergescore.itemlore.RenameCommand;
+import core.luuh.aspergescore.mobhealth.MobHealthListener;
 import core.luuh.aspergescore.pets.PetStandQJEvent;
 import core.luuh.aspergescore.scoreboard.SwitchWorldEvent;
 import core.luuh.aspergescore.utils.Ticker;
 import core.luuh.aspergescore.utils.pets.PSManager;
+import org.bukkit.Location;
+import org.bukkit.Particle;
 import org.bukkit.scheduler.BukkitRunnable;
 import core.luuh.aspergescore.utils.scoreboard.SBManager;
 import org.bukkit.entity.Player;
@@ -48,12 +53,15 @@ public final class AspergesCore extends JavaPlugin {
         this.getCommand("rename").setTabCompleter(new RenameCommand(this));
         this.getCommand("lore").setExecutor(new LoreCommand(this));
         this.getCommand("lore").setTabCompleter(new LoreCommand(this));
+        this.getCommand("health").setExecutor(new CustomHealthCommand(this));
     }
     
     private void registerEvents() {
+        Bukkit.getPluginManager().registerEvents(new SetStartingValuesDB(this), this);
         Bukkit.getPluginManager().registerEvents(new ScoreboardPlayerQJEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new SwitchWorldEvent(this), this);
         Bukkit.getPluginManager().registerEvents(new PetStandQJEvent(this), this);
+        Bukkit.getPluginManager().registerEvents(new MobHealthListener(this), this);
     }
     
     public Database getDatabase() {
@@ -83,12 +91,17 @@ public final class AspergesCore extends JavaPlugin {
         registerCommands();
         registerEvents();
         registerConfigs();
+
+        registerDB();
     }
 
     private double petHeight = 0.01;
     private boolean isAscending = true;
 
     public void onTick(){
+
+        // Pet Height Calculator
+
         if (isAscending) {
             petHeight += 0.01;
             if (petHeight >= 0.35) {
@@ -100,6 +113,8 @@ public final class AspergesCore extends JavaPlugin {
                 isAscending = true;
             }
         }
+
+        // Players
 
         for(Player player : Bukkit.getOnlinePlayers()){
 
@@ -141,7 +156,9 @@ public final class AspergesCore extends JavaPlugin {
     }
     
     public void onDisable() {
+        PSManager.removeAllPS();
         SBFilesManager.getInstance().saveData();
+        this.database.closeConnection();
 
         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + this.versionplugin + "&r &f»&r &cDISABLED!&r");
     }

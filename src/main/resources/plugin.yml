@@ -5,6 +5,7 @@ api-version: 1.19
 depend:
   - VerionCore
   - PlaceholderAPI
+  - MythicMobs
 commands:
   aspergescore:
     description: Manages core reloads.
@@ -29,5 +30,5 @@ commands:
     description: Renames item.
   lore:
     description: Manages item's lore.
-  ast:
-    description: Testing player's yaw
+  health:
+    description: Manages player's health.

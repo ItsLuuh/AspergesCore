@@ -33,7 +33,7 @@ public class SetStartingValuesDB implements Listener {
 
         } catch (SQLException exception){
 
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cCan't update stats of PLAYER: &b" + p.getName() + " &fto DB: &bplayer_stats&f!&r");
+            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cCan't update stats of PLAYER: &b" + p.getName() + " &fto DB: &bplayers_stats&f!&r");
             VerionAPIManager.logConsole("&fFollowing the Stack Trace:");
             exception.printStackTrace();
         }

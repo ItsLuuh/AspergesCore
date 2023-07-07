@@ -1,7 +1,9 @@
 package core.luuh.aspergescore.utils;
 
 import core.luuh.aspergescore.AspergesCore;
+import org.bukkit.configuration.ConfigurationSection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RCUtils {
@@ -10,6 +12,19 @@ public class RCUtils {
 
     private static final AspergesCore plugin = AspergesCore.getInstance();
 
+    public static List<ConfigurationSection> readCS(String path){
+
+        List<ConfigurationSection> csList = new ArrayList<>();
+
+        ConfigurationSection cs = plugin.getConfig().getConfigurationSection(path);
+        for (String s : cs.getKeys(false)) {
+
+            csList.add(plugin.getConfig().getConfigurationSection(s));
+
+        }
+
+        return csList;
+    }
 
     public static List<String> readList(String path) {
         return plugin.getConfig().getStringList(path);
@@ -29,5 +44,11 @@ public class RCUtils {
 
     public static Double readDouble(String path){
         return plugin.getConfig().getDouble(path);
+    }
+
+    public static void set(String path, Object value){
+        plugin.getConfig().set(path, value);
+        plugin.saveConfig();
+
     }
 }
