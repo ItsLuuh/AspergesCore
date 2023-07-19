@@ -66,9 +66,9 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
                             message.append(" ");
                             message.append(args[i]);
                         }
-                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-set")));
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-set", args[1])));
 
-                        setLore(args, item, message, Integer.parseInt(args[1]) -1);
+                        setLore(args, item, message, Integer.parseInt(args[1]));
                     } else if (args[0].equalsIgnoreCase("remove")) {
 
                         if (item.getItemMeta().hasLore()) {
@@ -76,10 +76,10 @@ public class LoreCommand implements CommandExecutor, TabCompleter {
                             int i = Integer.parseInt(args[1]);
                             if (i < item.getItemMeta().getLore().size()) {
                                 List<String> lore = itemMeta.getLore();
-                                lore.remove(i-1);
+                                lore.remove(i);
                                 itemMeta.setLore(lore);
                                 item.setItemMeta(itemMeta);
-                                player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove")));
+                                player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove", args[1])));
                             } else {
                                 player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove-too-big-arg")));
                             }

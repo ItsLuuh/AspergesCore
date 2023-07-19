@@ -1,5 +1,7 @@
 package core.luuh.aspergescore.utils;
 
+import java.text.DecimalFormat;
+
 public class NumberFormatter {
 
     public static String formatNumber(double number) {
@@ -16,6 +18,20 @@ public class NumberFormatter {
         }
 
         return formattedNumber;
+    }
+
+    public static String formatNumberCommas(long number) {
+        DecimalFormat formatter = new DecimalFormat("#,###");
+        return formatter.format(number);
+    }
+
+    public static boolean isLong(String input) {
+        try {
+            Long.parseLong(input);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
     }
 
 }

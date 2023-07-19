@@ -74,7 +74,7 @@ public class PSManager {
         Location armorStandLocation = playerLocation.clone().subtract(playerDirection.multiply(distance));
         armorStandLocation.add(playerLocation.getDirection().crossProduct(new Vector(0, 1, 0)).multiply(offsetAmount)); // Calculates general offset
         armorStandLocation.setY(playerLocation.getY() + yOffset + height);
-        armorStand.teleport(armorStandLocation);
+        armorStand.teleportAsync(armorStandLocation);
         particleGenerator(armorStand);
     }
 

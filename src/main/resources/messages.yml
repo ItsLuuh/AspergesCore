@@ -1,12 +1,12 @@
-## CASE ERROR MESSAGES ##
+# # CASE ERROR MESSAGES ##
 
-error-console-execute: ''
-not-enough-arguments: ''
-not-enough-perms: ''
-invalid-player: ''
-invalid-arg: ''
+error-console-execute: '%prefix%&cYou can''t execute this command on console.'
+not-enough-arguments: '%prefix%&c[lang]acore.mex-not.enough.args[/lang]'
+not-enough-perms: '%prefix%&c[lang]acore.mex-not.enough.perms[/lang]'
+invalid-player: '%prefix%&c[lang]acore.mex-invalid.player[/lang]'
+invalid-arg: '%prefix%&c[lang]acore.mex-invalid.arg[/lang]'
 
-## CORE COMMAND ##
+# # CORE COMMAND ##
 
 core-default-mex:
   - ''
@@ -14,32 +14,33 @@ core-default-mex:
   - '&fBy ItsLuuh.'
   - ''
 
-core-reload-all: ''
-core-reload-config: ''
-core-reload-scoreboards: ''
-core-reload-messages: ''
+core-reload-all: '%prefix%[lang]acore.mex-core.reload.all[/lang]'
+core-reload-config: '%prefix%[lang]acore.mex-core.reload.config[/lang]'
+core-reload-scoreboards: '%prefix%[lang]acore.mex-core.reload.scoreboards[/lang]'
+core-reload-messages: '%prefix%[lang]acore.mex-core.reload.messages[/lang]'
 
-## LOADSB ##
+# # LOADSB ##
 
-sb-updated: ''
+sb-updated: '%prefix%[lang]acore.mex-sb.updated[/lang]'
 
-## ITEM LORE ##
+# # ITEM LORE ##
 
-error-invalid-item: ''
-item-rename: ''
-item-lore-add: ''
-item-lore-set: ''
-item-lore-reset: ''
-item-lore-remove: ''
-item-lore-remove-too-big-arg: ''
-item-lore-no-lore: ''
-item-glow-add: ''
-item-glow-remove: ''
-item-enchants-hide: ''
-item-enchants-remove: ''
+error-invalid-item: '%prefix%&c[lang]acore.mex-error.invalid.item[/lang]'
+item-rename: '%prefix%[lang]acore.mex-item.rename[/lang]'
+item-lore-add: '%prefix%[lang]acore.mex-item.lore.add[/lang]'
+item-lore-set: '%prefix%[lang]acore.mex-item.lore.set[/lang]'
+item-lore-reset: '%prefix%[lang]acore.mex-item.lore.reset[/lang]'
+item-lore-remove: '%prefix%[lang]acore.mex-item.lore.remove[/lang]'
+item-lore-remove-too-big-arg: '%prefix%&c[lang]acore.mex-item.lore.remove.too.big.arg[/lang]'
+item-lore-no-lore: '%prefix%&c[lang]acore.mex-item.lore.no.lore[/lang]'
+item-glow-add: '%prefix%[lang]acore.mex-item.glow.add[/lang]'
+item-glow-remove: '%prefix%[lang]acore.mex-item.glow.remove[/lang]'
+item-enchants-hide: '%prefix%[lang]acore.mex-item.enchants.hide[/lang]'
+item-enchants-remove: '%prefix%[lang]acore.mex-item.enchants.remove[/lang]'
+item-attributes-hide: '%prefix%[lang]acore.mex-item.attributes.hide[/lang]'
 
-## HEALTH ##
+# # HEALTH ##
 
-health-maxhealth-set: ''
-health-scale-set: ''
-health-health-set: ''
+health-maxhealth-set: '%prefix%[lang]acore.mex-health.maxhealth.set[/lang]'
+health-scale-set: '%prefix%[lang]acore.mex-health.scale.set[/lang]'
+health-health-set: '%prefix%[lang]acore.mex-health.health.set[/lang]'

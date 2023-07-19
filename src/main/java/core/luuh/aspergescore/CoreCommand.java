@@ -1,6 +1,7 @@
 package core.luuh.aspergescore;
 
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.GUIFileManager;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.aspergescore.utils.files.MexFileManager;
 import core.luuh.aspergescore.utils.files.SBFileManager;
@@ -41,6 +42,7 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                 SBFileManager.getInstance().reloadData();
                 MexFileManager.getInstance().reloadData();
+                GUIFileManager.getInstance().reloadData();
                 plugin.reloadConfig();
                 VerionAPIManager.logConsole(MTUtils.readString("core-reload-all"));
 
@@ -50,6 +52,7 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                     SBFileManager.getInstance().reloadData();
                     MexFileManager.getInstance().reloadData();
+                    GUIFileManager.getInstance().reloadData();
                     plugin.reloadConfig();
                     VerionAPIManager.logConsole(MTUtils.readString("core-reload-all"));
 
@@ -67,6 +70,11 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                     MexFileManager.getInstance().reloadData();
                     VerionAPIManager.logConsole(MTUtils.readString("core-reload-messages"));
+
+                } else if(args[1].equalsIgnoreCase("guis")){
+
+                    GUIFileManager.getInstance().reloadData();
+                    VerionAPIManager.logConsole(MTUtils.readString("core-reload-guis"));
 
                 }
 
@@ -90,6 +98,7 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                     MexFileManager.getInstance().reloadData();
                     SBFileManager.getInstance().reloadData();
+                    GUIFileManager.getInstance().reloadData();
                     plugin.reloadConfig();
                     player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-all")));
 
@@ -99,6 +108,7 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                         SBFileManager.getInstance().reloadData();
                         MexFileManager.getInstance().reloadData();
+                        GUIFileManager.getInstance().reloadData();
                         plugin.reloadConfig();
                         player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-all")));
 
@@ -116,6 +126,11 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
 
                         MexFileManager.getInstance().reloadData();
                         player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-messages")));
+
+                    } else if(args[1].equalsIgnoreCase("guis")){
+
+                        GUIFileManager.getInstance().reloadData();
+                        player.sendMessage(chatcolor.col(MTUtils.readString("core-reload-guis")));
 
                     }
 
@@ -142,6 +157,7 @@ public class CoreCommand implements CommandExecutor, TabCompleter {
             arguments.add("config");
             arguments.add("scoreboards");
             arguments.add("messages");
+            arguments.add("guis");
 
         }
 

@@ -1,7 +1,9 @@
 package core.luuh.aspergescore.mysql.db;
 
 import core.luuh.aspergescore.AspergesCore;
-import core.luuh.aspergescore.mysql.model.PlayerStats;
+import core.luuh.aspergescore.mysql.PUUID;
+import core.luuh.aspergescore.mysql.model.Profile;
+import core.luuh.aspergescore.mysql.model.User;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -19,43 +21,27 @@ public class SetStartingValuesDB implements Listener {
 
 
     @EventHandler
-    public void onJoinEvent(PlayerJoinEvent e){
-
+    public void onJoinEvent(PlayerJoinEvent e) {
         Player p = e.getPlayer();
 
         try {
+            if(Database.getUserFromDatabase(p) == null) {
 
-            PlayerStats stats = getPlayerStatsFromDatabase(p);
-            stats.setLastLogin(new Date());
-            stats.setLastLogout(new Date());
+                String puuid = PUUID.generatePUUID().getValue();
 
-            plugin.getDatabase().updatePlayerStats(stats);
+                User user = new User(p.getUniqueId().toString(), puuid, p.getName(), 0, new Date(), new Date());
+                plugin.getDatabase().setUsers(user);
 
-        } catch (SQLException exception){
+                Profile profile = new Profile(p.getUniqueId().toString(), p.getName(), puuid, "christianity", 0, 0L, 0L, (short) 0, (short) 0, (short) 0, (short) 0, (short) 0, (short) 0, (short) 0, (short) 0, (short) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, (byte) 0, 0, 0, 0, 0, 0, 0, 0, 0);
+                plugin.getDatabase().setProfiles(profile);
 
-            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cCan't update stats of PLAYER: &b" + p.getName() + " &fto DB: &bplayers_stats&f!&r");
+            }
+
+        } catch (SQLException exception) {
+            VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cCan't update stats of PLAYER: &b" + p.getName() + " &fto DB: &busers/profiles&f!&r");
             VerionAPIManager.logConsole("&fFollowing the Stack Trace:");
             exception.printStackTrace();
         }
-
-    }
-
-    private PlayerStats getPlayerStatsFromDatabase(Player p) throws SQLException{
-
-        PlayerStats stats = plugin.getDatabase().findPlayerStatsByUUID(p.getUniqueId().toString());
-
-        if (stats == null) {
-
-            stats = new PlayerStats(p.getUniqueId().toString(), 0, 0, 0, new Date(), new Date());
-
-            plugin.getDatabase().setPlayerStats(stats);
-
-            return stats;
-
-        }
-
-        return stats;
-
     }
 
 }

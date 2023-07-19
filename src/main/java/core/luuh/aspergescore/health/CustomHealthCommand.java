@@ -30,17 +30,17 @@ public class CustomHealthCommand implements CommandExecutor, TabCompleter {
         if(args[0].equalsIgnoreCase("setmax")){
 
             player.setMaxHealth(Double.parseDouble(args[1]));
-            player.sendMessage(chatcolor.col(MTUtils.readString("health-maxhealth-set")));
+            player.sendMessage(chatcolor.col(MTUtils.readString("health-maxhealth-set", args[1])));
 
         } else if(args[0].equalsIgnoreCase("setscale")) {
 
             player.setHealthScale(Double.parseDouble(args[1]));
-            player.sendMessage(chatcolor.col(MTUtils.readString("health-scale-set")));
+            player.sendMessage(chatcolor.col(MTUtils.readString("health-scale-set", args[1])));
 
         } else if(args[0].equalsIgnoreCase("sethealth")) {
 
             player.setHealth(Double.parseDouble(args[1]));
-            player.sendMessage(chatcolor.col(MTUtils.readString("health-health-set")));
+            player.sendMessage(chatcolor.col(MTUtils.readString("health-health-set", args[1])));
 
         }
 

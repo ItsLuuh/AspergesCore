@@ -1,6 +1,7 @@
-package core.luuh.aspergescore.mobhealth;
+package core.luuh.aspergescore.mobs.nametag;
 
 import core.luuh.aspergescore.AspergesCore;
+import core.luuh.aspergescore.utils.NBTUtils;
 import core.luuh.aspergescore.utils.NumberFormatter;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import io.lumine.mythic.bukkit.MythicBukkit;
@@ -87,12 +88,32 @@ public class MobHealthListener implements Listener {
     public void onEntityDamage(EntityDamageByEntityEvent e) {
 
 
-        if(!(MythicBukkit.inst().getMobManager().getMythicMobInstance(e.getEntity()) instanceof Player)) {
+        if(MythicBukkit.inst().getMobManager().getMythicMobInstance(e.getEntity()) != null) {
 
             ActiveMob mythicMob = MythicBukkit.inst().getMobManager().getMythicMobInstance(e.getEntity());
-            changeMobHealth(mythicMob, e.getFinalDamage());
+            customDamageMobs(e, mythicMob, e.getFinalDamage());
 
         }
+    }
+
+    private void customDamageMobs(EntityDamageByEntityEvent e, ActiveMob mythicMob, double damage){
+
+        if(e.getDamager() instanceof Player) {
+            Player player = (Player) e.getDamager();
+            if (mythicMob.getFaction().equalsIgnoreCase("Soul")) {
+                if (!NBTUtils.hasNBT(player.getInventory().getItemInMainHand(), "ability-damage-ghost")) {
+
+                    e.setCancelled(true);
+
+                } else {
+
+                    changeMobHealth(mythicMob, damage);
+
+                }
+
+            }
+        }
+
     }
 
 }

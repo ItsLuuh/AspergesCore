@@ -1,15 +1,15 @@
-package core.luuh.aspergescore.utils;
+package core.luuh.aspergescore.utils.ticker;
 
 import core.luuh.aspergescore.AspergesCore;
 import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitScheduler;
 
-public class Ticker {
+public class TickerTicks {
 
     private boolean enabled;
     private final AspergesCore plugin;
 
-    public Ticker(AspergesCore plugin) {
+    public TickerTicks(AspergesCore plugin) {
         this.plugin = plugin;
     }
 
@@ -23,7 +23,8 @@ public class Ticker {
         }, 1L);
     }
 
-    public Ticker toggle() {
+
+    public TickerTicks toggle() {
         enabled=!enabled;
         if(enabled) {
             Count();
@@ -31,7 +32,7 @@ public class Ticker {
         return this;
     }
 
-    public Ticker setEnabled(boolean bool) {
+    public TickerTicks setEnabled(boolean bool) {
         if(enabled==bool) {
             return this;
         }

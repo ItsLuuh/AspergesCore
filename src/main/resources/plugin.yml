@@ -6,6 +6,7 @@ depend:
   - VerionCore
   - PlaceholderAPI
   - MythicMobs
+  - SlimeWorldManager
 commands:
   aspergescore:
     description: Manages core reloads.
@@ -32,3 +33,9 @@ commands:
     description: Manages item's lore.
   health:
     description: Manages player's health.
+  secretcommands:
+    description: Manages secret commands.
+  economy:
+    description: Manages economy of players.
+  is:
+    description: Manages player's island.

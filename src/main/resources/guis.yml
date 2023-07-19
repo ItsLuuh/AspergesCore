@@ -1,0 +1,6 @@
+mainmenu:
+  title: Title Menu
+  rows: 5
+  slots:
+    22:
+      MATERIAL: PLAYER_HEAD

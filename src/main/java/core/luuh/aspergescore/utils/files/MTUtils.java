@@ -65,6 +65,14 @@ public class MTUtils {
         return AspergesCore.replaceCustomPlaceHolders(mfM.getMessages().getString(path));
     }
 
+    public static String readString(String path, String arg_one){
+        return AspergesCore.replaceCustomPlaceHolders(mfM.getMessages().getString(path).replaceAll("%arg1%", arg_one));
+    }
+
+    public static String readString(String path, String arg_one, String arg_two){
+        return AspergesCore.replaceCustomPlaceHolders(mfM.getMessages().getString(path).replaceAll("%arg1%", arg_one).replaceAll("%arg2%", arg_two));
+    }
+
     public static Integer readInt(String path){
         return mfM.getMessages().getInt(path);
     }

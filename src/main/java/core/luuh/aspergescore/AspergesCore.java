@@ -1,22 +1,30 @@
 package core.luuh.aspergescore;
 
+import core.luuh.aspergescore.attributes.ItemHotBarAttEvent;
+import core.luuh.aspergescore.economy.EconomyManagerCommand;
+import core.luuh.aspergescore.mainmenu.mainpage.MainPageInventory;
 import core.luuh.aspergescore.mysql.db.SetStartingValuesDB;
 import core.luuh.aspergescore.health.CustomHealthCommand;
 import core.luuh.aspergescore.itemlore.ItemLoreCommand;
 import core.luuh.aspergescore.itemlore.LoreCommand;
 import core.luuh.aspergescore.itemlore.RenameCommand;
-import core.luuh.aspergescore.mobhealth.MobHealthListener;
+import core.luuh.aspergescore.mobs.nametag.MobHealthListener;
 import core.luuh.aspergescore.pets.PetStandQJEvent;
+import core.luuh.aspergescore.privateisle.PIsleCommand;
 import core.luuh.aspergescore.scoreboard.SwitchWorldEvent;
-import core.luuh.aspergescore.utils.Ticker;
+import core.luuh.aspergescore.utils.PlaceholderAPIHook;
+import core.luuh.aspergescore.utils.ticker.TickerSeconds;
+import core.luuh.aspergescore.utils.ticker.TickerTicks;
 import core.luuh.aspergescore.utils.PSManager;
 import core.luuh.aspergescore.utils.SBManager;
+import core.luuh.aspergescore.utils.files.GUIFileManager;
 import core.luuh.aspergescore.utils.files.MexFileManager;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.entity.Player;
 import core.luuh.aspergescore.utils.files.SBFileManager;
 import java.sql.SQLException;
+
 import core.luuh.verioncore.VerionAPIManager;
 import core.luuh.aspergescore.scoreboard.ScoreboardPlayerQJEvent;
 import org.bukkit.Bukkit;
@@ -26,14 +34,19 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class AspergesCore extends JavaPlugin {
+
     String versionplugin;
     static AspergesCore instance;
     private Database database;
-    private Ticker ticker;
+    private TickerTicks tickerT;
+    private TickerSeconds tickerS;
+    private double petHeight = 0.01;
+    private boolean isAscending = true;
 
     final SBFileManager sfM = SBFileManager.getInstance();
 
     final MexFileManager mfM = MexFileManager.getInstance();
+    final GUIFileManager gfM = GUIFileManager.getInstance();
     
     public AspergesCore() {
         versionplugin = getDescription().getVersion();
@@ -46,6 +59,7 @@ public final class AspergesCore extends JavaPlugin {
     public static AspergesCore getInstance() {
         return AspergesCore.instance;
     }
+
 
     public static String replaceCustomPlaceHolders(String s){
 
@@ -81,6 +95,18 @@ public final class AspergesCore extends JavaPlugin {
         PluginCommand healthCommand = getCommand("health");
         healthCommand.setExecutor(new CustomHealthCommand(this));
         healthCommand.setTabCompleter(new CustomHealthCommand(this));
+
+        PluginCommand secretcommands = getCommand("secretcommands");
+        secretcommands.setExecutor(new MainPageInventory(this));
+
+        PluginCommand economyManager = getCommand("economy");
+        economyManager.setExecutor(new EconomyManagerCommand(this));
+        economyManager.setTabCompleter(new EconomyManagerCommand(this));
+
+        PluginCommand pisleCommand = getCommand("is");
+        pisleCommand.setExecutor(new PIsleCommand(this));
+
+
     }
 
     private void registerEvents() {
@@ -90,6 +116,9 @@ public final class AspergesCore extends JavaPlugin {
         pluginManager.registerEvents(new SwitchWorldEvent(this), this);
         pluginManager.registerEvents(new PetStandQJEvent(this), this);
         pluginManager.registerEvents(new MobHealthListener(this), this);
+        pluginManager.registerEvents(new ItemHotBarAttEvent(this), this);
+        pluginManager.registerEvents(new TimeBendSword(this), this);
+
     }
     
     public Database getDatabase() {
@@ -98,7 +127,7 @@ public final class AspergesCore extends JavaPlugin {
 
     private void registerDB(){
         try {
-            (database = new Database(this)).initializeDatabase();
+            (database = new Database()).initializeDatabase();
         }
         catch (SQLException e) {
             VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + versionplugin + "&r &f»&r &cCan't connect to DB: &bplayer_stats&f!&r");
@@ -111,11 +140,17 @@ public final class AspergesCore extends JavaPlugin {
     private void registerConfigs() {
         sfM.setup(this);
         mfM.setup(this);
+        gfM.setup(this);
+        getConfig().options().copyDefaults(true);
         saveDefaultConfig();
         sfM.getData().options().copyDefaults(true);
+        sfM.saveData();
         mfM.getMessages().options().copyDefaults(true);
+        mfM.saveData();
+        gfM.getData().options().copyDefaults(true);
+        mfM.saveData();
     }
-    
+
     private void registerAll() {
         registerCommands();
         registerEvents();
@@ -123,16 +158,24 @@ public final class AspergesCore extends JavaPlugin {
 
         registerDB();
 
-        // Ticker
-        ticker=new Ticker(this);
-        ticker.setEnabled(true);
+        // PAPI
+        if(Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            new PlaceholderAPIHook(this).register();
+        }
 
+        // TickerTicks
+        tickerT=new TickerTicks(this);
+        tickerT.setEnabled(true);
+        // TickerSeconds
+        tickerS=new TickerSeconds(this);
+        tickerS.setEnabled(true);
     }
 
     private void saveConfigs(){
 
         SBFileManager.getInstance().saveData();
         MexFileManager.getInstance().saveData();
+        GUIFileManager.getInstance().saveData();
 
     }
 
@@ -143,9 +186,6 @@ public final class AspergesCore extends JavaPlugin {
         PSManager.removeAllPS();
 
     }
-
-    private double petHeight = 0.01;
-    private boolean isAscending = true;
 
     public void onTick(){
 
@@ -173,12 +213,33 @@ public final class AspergesCore extends JavaPlugin {
         }
     }
 
+    public void onSecond(){
+
+        TimeBendSword.verifyEntitiesTBend();
+
+        // Players
+
+        for(Player player : Bukkit.getOnlinePlayers()){
+
+            TimeBendSword.sendActionBar(player);
+
+        }
+
+    }
+
 
 
     public void onEnable() {
         instance = this;
         registerAll();
 
+        VerionAPIManager.logConsole("#FF0000  ___   ___________ ___________ _____  _____ _____ ");
+        VerionAPIManager.logConsole("#FF0000 / _ \\ /  ___| ___ \\  ___| ___ \\  __ \\|  ___/  ___|");
+        VerionAPIManager.logConsole("#FF0000/ /_\\ \\\\ `--.| |_/ / |__ | |_/ / |  \\/| |__ \\ `--. ");
+        VerionAPIManager.logConsole("#FF0000|  _  | `--. \\  __/|  __||    /| | __ |  __| `--. \\");
+        VerionAPIManager.logConsole("#FF0000| | | |/\\__/ / |   | |___| |\\ \\| |_\\ \\| |___/\\__/ /");
+        VerionAPIManager.logConsole("#FF0000\\_| |_/\\____/\\_|   \\____/\\_| \\_|\\____/\\____/\\____/ ");
+        VerionAPIManager.logConsole("");
         VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + versionplugin + "&r &f»&r &aENABLED!&r");
     }
     

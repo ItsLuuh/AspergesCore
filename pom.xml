@@ -78,6 +78,14 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>is-snapshots</id>
+            <url>https://repo.infernalsuite.com/repository/maven-snapshots/</url>
+        </repository>
+        <repository>
+            <id>flowpowered</id>
+            <url>https://repo.rapture.pw/repository/maven-releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -108,6 +116,12 @@
             <groupId>io.lumine</groupId>
             <artifactId>Mythic-Dist</artifactId>
             <version>5.3.3</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.infernalsuite.aswm</groupId>
+            <artifactId>api</artifactId>
+            <version>1.19.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

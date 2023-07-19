@@ -4,7 +4,6 @@ import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.NBTUtils;
 import core.luuh.aspergescore.utils.chatcolor;
 import core.luuh.aspergescore.utils.files.MTUtils;
-import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -108,7 +107,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                         }
 
                         LoreCommand.setLore(args, item, message, Integer.parseInt(args[2]));
-                        player.sendMessage(chatcolor.col(RCUtils.readString("item-lore-set")));
+                        player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-set", args[2] )));
                     }
                 } else if (args[0].equalsIgnoreCase("addlore") && args.length >= 2) {
 
@@ -126,7 +125,9 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                 } else if (args.length == 1) {
 
+                    ItemMeta itemMeta = item.getItemMeta();
                     switch (args[0]) {
+
 
                         case "resetlore":
 
@@ -155,7 +156,6 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                         case "hidenchants":
                         case "hideenchants":
 
-                            ItemMeta itemMeta = item.getItemMeta();
                             itemMeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             item.setItemMeta(itemMeta);
                             player.sendMessage(chatcolor.col(MTUtils.readString("item-enchants-hide")));
@@ -168,6 +168,15 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                                 item.removeEnchantment(e);
                             }
                             player.sendMessage(chatcolor.col(MTUtils.readString("item-enchants-remove")));
+
+                            break;
+                        case "hideattributes":
+
+                            itemMeta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                            item.setItemMeta(itemMeta);
+
+                            player.sendMessage(chatcolor.col(MTUtils.readString("item-attributes-hide")));
+
 
                             break;
 
@@ -201,7 +210,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                                     lore.remove(i - 1);
                                     itemMeta.setLore(lore);
                                     item.setItemMeta(itemMeta);
-                                    player.sendMessage(chatcolor.col("item-lore-remove"));
+                                    player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove", args[2])));
                                 } else {
                                     player.sendMessage(chatcolor.col(MTUtils.readString("item-lore-remove-too-big-arg")));
                                 }
@@ -220,7 +229,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
                         } else if (args[1].equalsIgnoreCase("get")) {
 
-                            NBTUtils.getNBT(item, args[2]);
+                            player.sendMessage(chatcolor.col(NBTUtils.getNBT(item, args[2])));
 
                         } else {
 
@@ -265,6 +274,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
             arguments.add("glow");
             arguments.add("removeglow");
             arguments.add("hidenchants");
+            arguments.add("hideattributes");
 
         } else if(args.length == 2){
 
