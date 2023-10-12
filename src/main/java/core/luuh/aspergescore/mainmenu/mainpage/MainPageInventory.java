@@ -2,6 +2,7 @@ package core.luuh.aspergescore.mainmenu.mainpage;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.CEM;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
@@ -62,12 +63,12 @@ public class MainPageInventory implements Listener, CommandExecutor {
         //secretcommands open profilesmenu
 
         if(!(sender instanceof Player)){
-            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex(CEM.ERROR_CONSOLE_EXECUTE));
         } else {
             Player player = (Player) sender;
             if(args.length == 0){
 
-                player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("not-enough-args")));
+                player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.NOT_ENOUGH_ARGS)));
 
             } else if(args.length == 1){
 

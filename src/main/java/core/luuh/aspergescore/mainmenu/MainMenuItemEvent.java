@@ -2,22 +2,20 @@ package core.luuh.aspergescore.mainmenu;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.chatcolor;
-import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.event.inventory.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class MainMenuItemEvent implements Listener {
 
@@ -35,6 +33,7 @@ public class MainMenuItemEvent implements Listener {
         ItemStack itemStack = new ItemStack(Material.ENDER_EYE, 1);
         ItemMeta itemMeta = itemStack.getItemMeta();
         itemMeta.setDisplayName(chatcolor.col(mmname));
+        itemMeta.setCustomModelData(10000);
         itemStack.setItemMeta(itemMeta);
         VerionAPIManager.setEnchanted(itemStack, true);
         e.getPlayer().getInventory().setItem(8, itemStack);
@@ -68,16 +67,46 @@ public class MainMenuItemEvent implements Listener {
     @EventHandler
     public void onItemClickInventory(InventoryClickEvent e){
 
-        if(e.getClickedInventory() != null && (e.getClickedInventory().getType().equals(InventoryType.PLAYER) || e.getClickedInventory().getType().equals(InventoryType.CREATIVE))) {
-            if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(chatcolor.col(mmname))) {
+        if(e.getClickedInventory() != null) {
+            if(e.getWhoClicked().getGameMode().equals(GameMode.SURVIVAL)) {
+                if (e.getCurrentItem().hasItemMeta() && e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase(chatcolor.col(mmname))) {
 
-                Player player = (Player) e.getWhoClicked();
-                e.setCancelled(true);
-                player.closeInventory();
-                player.performCommand("secretcommands open mainmenu");
+                    e.setCancelled(true);
+                    new BukkitRunnable() {
+                        @Override
+                        public void run() {
+                            openMenu((Player) e.getWhoClicked());
+                        }
+                    }.runTaskLater(plugin, 2L);
 
+
+                }
             }
         }
+
+    }
+
+    @EventHandler
+    public void onCreativeItemClick(InventoryCreativeEvent e){
+
+        if(e.getCursor().hasItemMeta() && e.getCursor().getItemMeta().getDisplayName().equalsIgnoreCase(chatcolor.col(mmname))){
+
+            e.setCancelled(true);
+            ItemStack item = new ItemStack(Material.ENDER_EYE);
+            VerionAPIManager.setEnchanted(item, true);
+            ItemMeta itemMeta = item.getItemMeta();
+            itemMeta.setDisplayName(chatcolor.col(mmname));
+            itemMeta.setCustomModelData(10000);
+            item.setItemMeta(itemMeta);
+            e.getClickedInventory().setItem(8, item);
+
+        }
+
+    }
+
+    private void openMenu(Player player){
+
+        player.performCommand("secretcommands open mainmenu");
 
     }
 

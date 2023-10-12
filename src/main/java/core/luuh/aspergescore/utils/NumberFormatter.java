@@ -34,4 +34,25 @@ public class NumberFormatter {
         }
     }
 
+    public static boolean isInteger(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException | NullPointerException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+    public static boolean isInt(String s) {
+        try {
+            Integer.parseInt(s);
+        } catch(NumberFormatException | NullPointerException e) {
+            return false;
+        }
+
+        return true;
+    }
+
+
 }

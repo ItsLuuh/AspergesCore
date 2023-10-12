@@ -4,13 +4,18 @@ import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.mysql.PUUID;
 import core.luuh.aspergescore.mysql.model.Profile;
 import core.luuh.aspergescore.mysql.model.User;
+import core.luuh.aspergescore.utils.DBUtils;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.sql.*;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Database {
 
@@ -18,15 +23,18 @@ public class Database {
 
     private Connection connection;
 
-    public Connection getConnection()  throws SQLException{
+    public Connection getConnection() throws SQLException {
 
         if(connection != null){
             return connection;
         }
 
-        String url = "jdbc:mysql://localhost/" + RCUtils.readString("database");
-        String user = RCUtils.readString("username");
-        String password = RCUtils.readString("password");
+        String user = RCUtils.readString("storage.username");
+        String password = RCUtils.readString("storage.password");
+        String address = DBUtils.createAddress(RCUtils.readString("storage.address"));
+        String database = RCUtils.readString("storage.database");
+        String url = "jdbc:mysql://"+ DBUtils.urlEncode(user)+":"+DBUtils.urlEncode(password)+"@"+address+"/"+database;
+
 
         this.connection = DriverManager.getConnection(url, user, password);
 

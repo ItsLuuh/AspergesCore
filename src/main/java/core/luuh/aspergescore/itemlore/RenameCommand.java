@@ -2,6 +2,7 @@ package core.luuh.aspergescore.itemlore;
 
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.CEM;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Material;
@@ -31,7 +32,7 @@ public class RenameCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex(CEM.ERROR_CONSOLE_EXECUTE));
 
         } else {
 

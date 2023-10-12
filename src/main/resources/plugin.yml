@@ -39,3 +39,9 @@ commands:
     description: Manages economy of players.
   is:
     description: Manages player's island.
+  party:
+    description: Manages player's party.
+  dungeon:
+    description: Manages dungeons.
+  level:
+    description: Manages player's level.

@@ -4,6 +4,7 @@ import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.aspergescore.utils.files.SBFileManager;
 import core.luuh.verioncore.VerionAPIManager;
+import me.clip.placeholderapi.PlaceholderAPI;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -21,7 +22,7 @@ import java.util.*;
 /**
  *
  * @author crisdev333
- * @author ItsLuuh (made small changes)
+ * @author ItsLuuh
  *
  */
 public class SBManager {
@@ -87,8 +88,9 @@ public class SBManager {
     }
 
     // sets the title of the scoreboard, max 32 chars
-    public void setTitle(String title) {
+    public void setTitle(String title, Player player) {
 
+        title = chatcolor.papi(player, title);
         Component component = chatcolor.mm(title);
         sidebar.displayName(component);
 
@@ -174,6 +176,26 @@ public class SBManager {
         }
     }
 
+
+    // updates scores for Player
+    public static void registerScoreUpdate(Player player) {
+
+        SBManager sbM = getByPlayer(player);
+        int i = 15;
+        for (String s : sbM.getLines(player)) {
+
+            if (i == 0) break;
+
+            // only first (test)
+            sbM.setSlot(i, sbM.getTextFirst(player, s), player);
+
+            i--;
+
+        }
+
+
+    }
+
     // get interval of a line in the scoreboard
     public long getLineInterval(Player player, String line){
 
@@ -187,6 +209,22 @@ public class SBManager {
         }
 
         return 0L;
+
+    }
+
+    // get first text of a line in the scoreboard
+    public String getTextFirst(Player player, String line){
+
+        if (SBManager.hasScore(player)) {
+            SBFileManager sbF = SBFileManager.getInstance();
+            String name = SBManager.getScoreNameOfPlayerByHM(player);
+            ConfigurationSection sbN = sbF.getData().getConfigurationSection(name);
+            ConfigurationSection cs = sbN.getConfigurationSection(line);
+            return cs.getStringList("text").get(0);
+
+        }
+
+        return null;
 
     }
 
@@ -294,7 +332,7 @@ public class SBManager {
 
 
             // sets the title of the scoreboard
-            sb.setTitle(title);
+            sb.setTitle(title, player);
 
             // add the list "lines" to the scoreboard
             sb.setSlotsFromList(lines, player);
@@ -304,24 +342,6 @@ public class SBManager {
         } else {
             VerionAPIManager.logConsole("#D60000[#FF0000!#D60000]&r &6ASPERGES-Core&r " + plugin.getVersionPlugin() + "&r &f»&r &cYou need to set valid arguments! &7(/loadsb [SCOREBOARD-NAME] [PLAYER])&r");
         }
-
-    }
-
-    // updates scores for Player
-    public static void registerScoreUpdate(Player player) {
-
-        SBManager sbM = getByPlayer(player);
-        int i = 15;
-        for (String s : sbM.getLines(player)) {
-
-            if (i == 0) break;
-
-            scoreUpdateTask(player, s, i);
-
-            i--;
-
-        }
-
 
     }
 

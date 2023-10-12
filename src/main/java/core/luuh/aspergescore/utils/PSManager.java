@@ -3,6 +3,7 @@ package core.luuh.aspergescore.utils;
 import core.luuh.aspergescore.utils.files.RCUtils;
 import core.luuh.aspergescore.utils.chatcolor;
 import core.luuh.verioncore.VerionAPIManager;
+import net.minecraft.network.protocol.game.ClientboundPlayerInfoUpdatePacket;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.EulerAngle;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
@@ -26,24 +28,15 @@ public class PSManager {
     // creates the PetStand for Player
     public static void createPSofPlayer(Player player){
 
-        Location playerLocation = player.getLocation();
-        Vector playerDirection = playerLocation.getDirection();
-        Vector oppositeDirection = playerDirection.multiply(-1.25);
-
-        Location armorStandLocation = playerLocation.clone().add(oppositeDirection);
-        armorStandLocation.setY(playerLocation.getY());
-
-        ArmorStand armorStand = (ArmorStand) playerLocation.getWorld().spawnEntity(armorStandLocation, EntityType.ARMOR_STAND);
+        ArmorStand armorStand = (ArmorStand) player.getLocation().getWorld().spawnEntity(player.getLocation(), EntityType.ARMOR_STAND);
 
         armorStand.setInvisible(true);
         armorStand.setGravity(false);
+        armorStand.setSmall(true);
         armorStand.customName(chatcolor.mm("<#FF0000>" + player.getName()+"'s Pet &8[&cLv. 100&8]"));
         armorStand.setCustomNameVisible(true);
 
-        armorStand.setDisabledSlots(EquipmentSlot.HEAD);
-        armorStand.setDisabledSlots(EquipmentSlot.CHEST);
-        armorStand.setDisabledSlots(EquipmentSlot.LEGS);
-        armorStand.setDisabledSlots(EquipmentSlot.FEET);
+        armorStand.addDisabledSlots(EquipmentSlot.HEAD,EquipmentSlot.CHEST,EquipmentSlot.LEGS,EquipmentSlot.FEET);
 
         ItemStack item = VerionAPIManager.createStartItem(Material.PLAYER_HEAD, 1);
         SkullMeta meta = (SkullMeta)item.getItemMeta();
@@ -55,13 +48,72 @@ public class PSManager {
 
     }
 
-    // changes position of PetStand
-    public static void updatePSPosOfPlayer(Player player) {
-        double height = 0.0; // Default Height
-        updatePSPosOfPlayer(player, height);
+    private static boolean isAscending = true;
+    private static float petHeight;
+
+    public static void checkArmorStandPosition(Player player) {
+        ArmorStand armorStand = getPSbyPlayer(player);
+
+        if (armorStand != null) {
+            Location armorStandLocation = armorStand.getLocation();
+            Location playerLocation = player.getLocation();
+            particleGenerator(armorStand);
+
+            double distanceThreshold = RCUtils.readDouble("pet-distance");
+            double currentDistance = armorStandLocation.distance(playerLocation);
+
+            if (currentDistance > distanceThreshold) {
+                // Calculate the direction towards the player's current position
+                Vector petDirection = playerLocation.toVector().subtract(armorStandLocation.toVector()).normalize();
+
+                // Calculate the speed based on the distance, using a logarithmic interpolation
+                double maxSpeed = 0.3; // Adjust this value to control the maximum speed
+                double minSpeed = 0.05; // Adjust this value to control the minimum speed
+                double speed = maxSpeed * Math.log(currentDistance) / Math.log(distanceThreshold);
+                speed = Math.max(speed, minSpeed); // Ensure the speed is at least minSpeed
+
+                // Calculate the desired position for the pet at the distanceThreshold from the player
+                Location desiredPetLocation = playerLocation.clone().add(petDirection.multiply(distanceThreshold));
+
+                // Calculate the direction from the current armor stand position to the desired position
+                Vector movement = desiredPetLocation.toVector().subtract(armorStandLocation.toVector()).normalize().multiply(speed);
+
+                // Move the armor stand towards the desired position
+                Location newArmorStandLocation = armorStandLocation.add(movement);
+
+                // Check if the new location exceeds the distance threshold from the initial position
+                Location initialArmorStandLocation = getPSbyPlayer(player).getLocation();
+                double maxAllowedDistance = initialArmorStandLocation.distance(playerLocation) + distanceThreshold;
+                if (newArmorStandLocation.distanceSquared(initialArmorStandLocation) <= maxAllowedDistance * maxAllowedDistance) {
+                    // Only update the ArmorStand's location if it's within the allowed distance from the initial position
+                    armorStand.teleportAsync(newArmorStandLocation);
+                }
+
+                // Set the ArmorStand's head pose to make it look at the player
+                armorStandLocation.setDirection(petDirection);
+                armorStand.teleportAsync(armorStandLocation);
+            }
+
+            // Updates the height of the armorstand
+            if (isAscending) {
+                petHeight += 0.01;
+                if (petHeight >= 0.35) {
+                    isAscending = false;
+                }
+            } else {
+                petHeight -= 0.01;
+                if (petHeight <= 0.0) {
+                    isAscending = true;
+                }
+            }
+
+            // Apply the height to the armorstand
+            armorStandLocation.setY(player.getLocation().getY() + RCUtils.readDouble("pet-height-offset") + petHeight);
+            armorStand.teleportAsync(armorStandLocation);
+        }
     }
 
-    // changes position of PetStand including height
+    /*
     public static void updatePSPosOfPlayer(Player player, double height) {
         ArmorStand armorStand = getPSbyPlayer(player);
         Location playerLocation = player.getLocation();
@@ -76,6 +128,22 @@ public class PSManager {
         armorStandLocation.setY(playerLocation.getY() + yOffset + height);
         armorStand.teleportAsync(armorStandLocation);
         particleGenerator(armorStand);
+    }
+     */
+
+    private static Vector getPetDirection(Player player) {
+        Vector playerDirection = player.getLocation().getDirection().setY(0).normalize();
+
+        // Set the desired distance from the player
+        double desiredDistance = 2.5;
+
+        // Calculate the target location for the pet
+        Location petLocation = player.getLocation().clone().subtract(playerDirection.multiply(desiredDistance));
+
+        // Calculate the direction from the pet's location to the player's location
+        Vector petDirection = player.getLocation().toVector().subtract(petLocation.toVector()).normalize();
+
+        return petDirection;
     }
 
     // makes the particles under the pet

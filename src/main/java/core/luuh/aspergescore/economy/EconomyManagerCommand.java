@@ -5,6 +5,7 @@ import core.luuh.aspergescore.mysql.db.Database;
 import core.luuh.aspergescore.mysql.model.Profile;
 import core.luuh.aspergescore.utils.NumberFormatter;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.CEM;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Bukkit;
@@ -33,7 +34,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex(CEM.ERROR_CONSOLE_EXECUTE));
 
         } else {
 
@@ -56,7 +57,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
 
                 if(args.length == 0){
 
-                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("not-enough-args")));
+                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.NOT_ENOUGH_ARGUMENTS)));
 
                 }else if (args.length == 1) {
 
@@ -66,7 +67,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
 
                     } else {
 
-                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg")));
+                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.INVALID_ARGS)));
 
                     }
 
@@ -94,7 +95,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(chatcolor.col(MTUtils.readString("economy-set-yours", NumberFormatter.formatNumberCommas(modifier))));
                         }
                     } else {
-                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg")));
+                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.INVALID_ARG)));
                     }
 
                     try {
@@ -108,7 +109,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
 
                     if(Bukkit.getPlayer(args[1]) == null) {
 
-                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg")));
+                        player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.INVALID_ARG)));
 
                     } else {
                         Player target = Bukkit.getPlayer(args[1]);
@@ -127,7 +128,7 @@ public class EconomyManagerCommand implements CommandExecutor, TabCompleter {
                             player.sendMessage(chatcolor.col(MTUtils.readString("economy-set-others", NumberFormatter.formatNumberCommas(modifier), target.getName())));
                             target.sendMessage(chatcolor.col(MTUtils.readString("economy-others-set", NumberFormatter.formatNumberCommas(modifier), player.getName())));
                         } else {
-                            player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("invalid-arg")));
+                            player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.INVALID_ARG)));
                         }
 
 

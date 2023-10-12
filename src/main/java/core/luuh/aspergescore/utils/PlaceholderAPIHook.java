@@ -4,8 +4,12 @@ import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.mysql.PUUID;
 import core.luuh.aspergescore.mysql.db.Database;
 import core.luuh.aspergescore.mysql.model.Profile;
+import core.luuh.aspergescore.utils.files.RCUtils;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 
 import java.util.Arrays;
@@ -36,7 +40,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         return true; // This is required or else PlaceholderAPI will unregister the Expansion on reload
     }
 
-    public String extractFirstPart(String input) {
+    public static String extractFirstPart(String input) {
         String[] parts = input.split("_");
         if (parts.length > 0) {
             return parts[0];
@@ -44,7 +48,7 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         return null;  // Restituisce null se la stringa è vuota o non contiene il separatore "_"
     }
 
-    public String extractSecondPart(String input) {
+    public static String extractSecondPart(String input) {
         String[] parts = input.split("_");
         if (parts.length > 1) {
             return String.join("_", Arrays.copyOfRange(parts, 1, parts.length));
@@ -52,8 +56,48 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
         return null;  // Restituisce null se la stringa è vuota o non contiene il separatore "_" o contiene solo una parte
     }
 
+    public String getPlayerWorld(Player player) {
+
+        String worldName = player.getWorld().getName();
+
+        if(worldName.contains("PrivateIs"))return RCUtils.readString("worlds.privateisland") + "Private Island";
+        if(worldName.contains("Dungeon"))return RCUtils.readString("worlds.dungeon") + "Dungeon";
+
+        String s;
+        if(RCUtils.readString("worlds." + worldName) != null)s = RCUtils.readString("worlds." + worldName);
+        else s = RCUtils.readString("worlds.default");
+
+        return s + worldName;
+    }
+
+    public String getStageOfPlayer(int level) {
+        String stage = "Unknown";
+
+        ConfigurationSection stagesSection = plugin.getConfig().getConfigurationSection("stages");
+
+        if (stagesSection != null) {
+            for (String stageKey : stagesSection.getKeys(false)) {
+                String[] levelRange = plugin.getConfig().getString("stages." + stageKey).split("-");
+
+                if (levelRange.length == 2) {
+                    int min = Integer.parseInt(levelRange[0]);
+                    int max = Integer.parseInt(levelRange[1]);
+
+                    if (level >= min && level <= max) {
+                        stage = stageKey;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return stage;
+    }
+
     @Override
     public String onRequest(OfflinePlayer player, String params) {
+
+        if(params.equalsIgnoreCase("player_world")) return getPlayerWorld((Player) player);
 
         String sProfile = extractFirstPart(params.toLowerCase());
         String s = extractSecondPart(params.toLowerCase());
@@ -74,6 +118,10 @@ public class PlaceholderAPIHook extends PlaceholderExpansion {
                 return NumberFormatter.formatNumber(profile.getPolusVault());
             case "lvl":
                 return String.valueOf(profile.getLvl());
+            case "stage":
+                return getStageOfPlayer(profile.getLvl());
+            case "stage_color":
+                return chatcolor.col(RCUtils.readString("stages-color." + getStageOfPlayer(profile.getLvl())));
             case "base_health":
                 return String.valueOf(profile.getBaseHealth());
             case "base_strength":

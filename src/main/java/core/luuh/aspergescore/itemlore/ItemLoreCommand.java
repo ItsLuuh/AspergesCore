@@ -3,6 +3,7 @@ package core.luuh.aspergescore.itemlore;
 import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.utils.NBTUtils;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.CEM;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import org.bukkit.Material;
@@ -33,7 +34,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
 
         if(!(sender instanceof Player)){
 
-            VerionAPIManager.logConsole(MTUtils.caseErrorMex("error-console-execute"));
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex(CEM.ERROR_CONSOLE_EXECUTE));
 
         } else {
 
@@ -62,7 +63,7 @@ public class ItemLoreCommand implements CommandExecutor, TabCompleter {
                 ItemStack item = player.getInventory().getItemInMainHand();
                 if (args.length == 0) {
 
-                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex("not-enough-arguments")));
+                    player.sendMessage(chatcolor.col(MTUtils.caseErrorMex(CEM.NOT_ENOUGH_ARGUMENTS)));
 
                 } else if (args[0].equalsIgnoreCase("rename") && args.length >= 2){
 

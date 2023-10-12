@@ -10,6 +10,7 @@ import core.luuh.aspergescore.AspergesCore;
 import core.luuh.aspergescore.mysql.db.Database;
 import core.luuh.aspergescore.mysql.model.Profile;
 import core.luuh.aspergescore.utils.chatcolor;
+import core.luuh.aspergescore.utils.files.CEM;
 import core.luuh.aspergescore.utils.files.MTUtils;
 import core.luuh.verioncore.VerionAPIManager;
 import io.papermc.paper.event.world.border.WorldBorderCenterChangeEvent;
@@ -37,19 +38,31 @@ public class PIsleCommand implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        Player player = (Player) sender;
-        SlimeWorld world = null;
-        try {
-            world = createIs(player);
-        } catch (IOException | UnknownWorldException | WorldAlreadyExistsException | WorldLockedException | CorruptedWorldException | NewerFormatException e) {
-            e.printStackTrace();
-            player.sendMessage(chatcolor.col("not working, watch the errors in the console."));
-        }
+        if (!(sender instanceof Player)) {
 
-        if(world != null) {
-            Location loc = new Location(Bukkit.getWorld(world.getName()), 0.5, 100, 0.5);
-            player.teleportAsync(loc);
-            player.sendMessage(chatcolor.col(MTUtils.readString("island-teleporting-to")));
+            VerionAPIManager.logConsole(MTUtils.caseErrorMex(CEM.ERROR_CONSOLE_EXECUTE));
+
+        } else {
+            if (args.length == 0) {
+
+                Player player = (Player) sender;
+                SlimeWorld world = null;
+                try {
+                    world = createIs(player);
+                } catch (IOException | UnknownWorldException | WorldAlreadyExistsException | WorldLockedException |
+                         CorruptedWorldException | NewerFormatException e) {
+                    e.printStackTrace();
+                    player.sendMessage(chatcolor.col("not working, watch the errors in the console."));
+                }
+
+                if (world != null) {
+                    Location loc = new Location(Bukkit.getWorld(world.getName()), 0.5, 100, 0.5);
+                    player.teleportAsync(loc);
+                    player.sendMessage(chatcolor.col(MTUtils.readString("island-teleporting-to")));
+                }
+
+            }
+
         }
 
         return true;

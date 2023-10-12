@@ -1,6 +1,8 @@
 package core.luuh.aspergescore.utils.files;
 
 import core.luuh.aspergescore.AspergesCore;
+import core.luuh.aspergescore.utils.chatcolor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.configuration.ConfigurationSection;
 
 import java.util.ArrayList;
@@ -36,6 +38,10 @@ public class RCUtils {
 
     public static String readString(String path){
         return plugin.getConfig().getString(path);
+    }
+
+    public static Component readComponent(String path){
+        return chatcolor.mm(AspergesCore.replaceCustomPlaceHolders(plugin.getConfig().getString(path)));
     }
 
     public static Integer readInt(String path){
